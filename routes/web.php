@@ -35,6 +35,10 @@ Route::prefix('dashboard')->group(function () {
     Route::controller(PenggunaController::class)->prefix('pengguna')->name('pengguna.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'createView')->name('create.view');
-        Route::get('/update', 'updateView')->name('update.view');
+        Route::post('/create', 'createAction')->name('create.action');
+        Route::get('/update/{id_pengguna}', 'updateView')->name('update.view');
+        Route::put('/update/{id_pengguna}', 'updateAction')->name('update.action');
+        Route::get('/delete/{id_pengguna}', 'deleteAction')->name('delete.action');
+        Route::get('/datatables', 'datatables')->name('datatables');
     });
 });

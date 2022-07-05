@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             "id_pengguna" => "ST_001",
             "nama_pengguna" => "pak budi",
             "email_pengguna" => "budi@gmail.com",
-            "jabatan_pengguna" => "Staf",
+            "jabatan_pengguna" => "staf",
             "username" => "staf",
             "password" => bcrypt("staf")
         ]);

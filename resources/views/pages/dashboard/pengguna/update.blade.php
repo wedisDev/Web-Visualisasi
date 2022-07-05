@@ -7,11 +7,14 @@
     <h1 class="h4">Ubah Pengguna</h1>
     <div class="card mt-5">
       <div class="card-body">
-        <form action="" method="POST">
+        <form action="{{ route('pengguna.update.action', $pengguna->id_pengguna) }}" method="POST">
+          @csrf
+          @method('put')
           <div class="mb-3 row">
             <label for="id_pengguna" class="col-sm-2 col-form-label">ID Pengguna</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="id_pengguna" name="id_pengguna"
+                value="{{ $pengguna->id_pengguna }}" readonly
                 placeholder="WR_001 = Warek, KB_001 = Kabag, ST_001 = Staf">
             </div>
           </div>
@@ -19,36 +22,48 @@
             <label for="nama_pengguna" class="col-sm-2 col-form-label">Nama Pengguna</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="nama_pengguna" name="nama_pengguna"
-                placeholder="masukkan nama pengguna">
+                value="{{ $pengguna->nama_pengguna }}" placeholder="masukkan nama pengguna">
+              @error('nama_pengguna')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="email" class="col-sm-2 col-form-label">Email</label>
+            <label for="email_pengguna" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="email" name="email" placeholder="masukkan email">
+              <input type="text" class="form-control" id="email_pengguna" name="email_pengguna"
+                value="{{ $pengguna->email_pengguna }}" placeholder="masukkan email">
             </div>
           </div>
           <div class="mb-3 row">
-            <label for="jabatan" class="col-sm-2 col-form-label">Jabatan</label>
+            <label for="jabatan_pengguna" class="col-sm-2 col-form-label">Jabatan</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="jabatan" name="jabatan" placeholder="masukkan jabatan">
+              <select class="form-select" id="jabatan_pengguna" name="jabatan_pengguna">
+                @foreach ($jabatan as $loopItem)
+                @if ($loopItem == $pengguna->jabatan_pengguna)
+                <option value="{{ $loopItem }}" class="text-capitalize" selected>{{ $loopItem }}</option>
+                @else
+                <option value="{{ $loopItem }}" class="text-capitalize">{{ $loopItem }}</option>
+                @endif
+                @endforeach
+              </select>
             </div>
           </div>
           <div class="mb-3 row">
             <label for="username" class="col-sm-2 col-form-label">Username</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="username" name="username" placeholder="masukkan username">
+              <input type="text" class="form-control" id="username" name="username" value="{{ $pengguna->username }}"
+                placeholder="masukkan username">
+              @error('username')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
           </div>
           <div class="mb-3 row">
             <label for="password" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="password" name="password" placeholder="masukkan password">
+              <input type="password" class="form-control" id="password" name="password" placeholder="masukkan password">
             </div>
           </div>
           <div>
             <button type="submit" class="btn btn-light">Simpan</button>
-            <button type="button" class="btn btn-light">Batal</button>
+            <a href="{{ route('pengguna.index') }}" class="btn btn-light">Batal</a>
           </div>
         </form>
       </div>

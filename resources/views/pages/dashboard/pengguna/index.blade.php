@@ -17,36 +17,7 @@
             <th>Aksi</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-          </tr>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-          </tr>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-          </tr>
-          <tr>
-            <td>Tiger Nixon</td>
-            <td>System Architect</td>
-            <td>Edinburgh</td>
-            <td>61</td>
-            <td>2011-04-25</td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
@@ -56,8 +27,56 @@
 
 @push('script')
 <script>
-  $(document).ready(function () {
-    $('#table_pengguna').DataTable();
+  const DATATABLES_URL_AJAX = "{{ route('pengguna.datatables') }}";
+  $('#table_pengguna').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    ajax: DATATABLES_URL_AJAX,
+    columns: [
+      {
+        data: 'DT_RowIndex',
+        orderable: false,
+        searchable: false
+      },
+      {
+        data: 'nama_pengguna'
+      },
+      {
+        data: 'email_pengguna'
+      },
+      {
+        data: 'jabatan_pengguna'
+      },
+      {
+        data: 'id_pengguna',
+        render: function(data){
+          let UPDATE_TRUCK_URL = "{{ route('pengguna.update.view', ':id') }}";
+          let DELETE_TRUCK_URL = "{{ route('pengguna.delete.action', ':id') }}";
+          
+          UPDATE_TRUCK_URL = UPDATE_TRUCK_URL.replace(':id', data);
+          DELETE_TRUCK_URL = DELETE_TRUCK_URL.replace(':id', data);
+
+          return `
+            <a class="btn btn-success btn-sm text-capitalize" href="${UPDATE_TRUCK_URL}">ubah</a>
+            <a class="btn btn-danger btn-sm text-capitalize mx-2 delete_truck" href="${DELETE_TRUCK_URL}">hapus</a>
+          `;
+        }
+      }
+    ],
+    initComplete: function(settings, json) {
+      $('.btn-danger').each(function(index){
+          $(this).on('click', function(event){
+            const question = confirm('apakah anda yakin menghapus data ini?');
+            
+            if(question){
+              return;
+            }else{
+              event.preventDefault();
+            }
+          });
+      });
+    },
   });
 </script>
 @endpush
