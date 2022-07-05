@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PenggunaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,4 +28,11 @@ Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(f
 // route dashboard
 Route::prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // route pengguna
+    Route::controller(PenggunaController::class)->prefix('pengguna')->name('pengguna.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'createView')->name('create.view');
+        Route::get('/update', 'updateView')->name('update.view');
+    });
 });
