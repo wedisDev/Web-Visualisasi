@@ -54,10 +54,10 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
               aria-expanded="false">
-              User
+              {{ auth('pengguna')->user()->nama_pengguna }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Keluar</a></li>
+              <li><a class="dropdown-item" href="{{ route('auth.logout.action') }}">Keluar</a></li>
             </ul>
           </li>
         </ul>

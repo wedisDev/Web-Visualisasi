@@ -17,12 +17,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('auth.login.view');
 });
 
 // route auth
 Route::controller(AuthController::class)->prefix('auth')->name('auth.')->group(function () {
     Route::get('/login', 'loginView')->name('login.view');
+    Route::post('/login', 'loginAction')->name('login.action');
+    Route::get('/logout', 'logoutAction')->name('logout.action');
 });
 
 // route dashboard
