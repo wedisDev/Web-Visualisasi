@@ -35,7 +35,7 @@
       <div class="col-lg-8">
         <div class="row">
           <div class="col-lg mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('visual.data.calon.mahasiswa') }}" class="text-decoration-none">
               <div class="card bg-light">
                 <div class="card-body card_visual">
                   <div class="icon">
@@ -47,7 +47,7 @@
             </a>
           </div>
           <div class="col-lg mb-4">
-            <a href="#" class="text-decoration-none">
+            <a href="{{ route('visual.data.sebaran.calon.mahasiswa') }}" class="text-decoration-none">
               <div class="card bg-light">
                 <div class="card-body card_visual">
                   <div class="icon">

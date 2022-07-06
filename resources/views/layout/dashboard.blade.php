@@ -11,7 +11,25 @@
     integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
+  <style>
+    .ui-datepicker-calendar {
+      display: none;
+    }
+
+    .ui-datepicker-month {
+      display: none;
+    }
+
+    .ui-datepicker-prev {
+      display: none;
+    }
+
+    .ui-datepicker-next {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -37,8 +55,11 @@
               Visualisasi
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Data Calon Mahasiswa</a></li>
-              <li><a class="dropdown-item" href="#">Data Sebaran Calon Mahasiswa</a></li>
+              <li>
+                <a class="dropdown-item" href="{{ route('visual.data.calon.mahasiswa') }}">Data Calon Mahasiswa</a>
+              </li>
+              <li><a class="dropdown-item" href="{{ route('visual.data.sebaran.calon.mahasiswa') }}">Data Sebaran Calon
+                  Mahasiswa</a></li>
             </ul>
           </li>
           <li class="nav-item">
@@ -76,6 +97,10 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js">
   </script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.0/chart.min.js"
+    integrity="sha512-sW/w8s4RWTdFFSduOTGtk4isV1+190E/GghVffMA9XczdJ2MDzSzLEubKAs5h0wzgSJOQTRYyaz73L3d6RtJSg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   @stack('script')
 </body>
 

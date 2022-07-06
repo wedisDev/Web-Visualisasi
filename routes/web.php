@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenggunaController;
+use App\Http\Controllers\VisualController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,5 +41,11 @@ Route::prefix('dashboard')->group(function () {
         Route::put('/update/{id_pengguna}', 'updateAction')->name('update.action');
         Route::get('/delete/{id_pengguna}', 'deleteAction')->name('delete.action');
         Route::get('/datatables', 'datatables')->name('datatables');
+    });
+
+    // route visual
+    Route::controller(VisualController::class)->prefix('visual')->name('visual.')->group(function () {
+        Route::get('/data-calon-mahasiswa', 'dataCalonMahasiswa')->name('data.calon.mahasiswa');
+        Route::get('/data-sebaran-calon-mahasiswa', 'dataSebaranCalonMahasiswa')->name('data.sebaran.calon.mahasiswa');
     });
 });
