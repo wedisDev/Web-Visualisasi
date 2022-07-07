@@ -62,12 +62,16 @@
                   Mahasiswa</a></li>
             </ul>
           </li>
+          @if (auth('pengguna')->user()->jabatan_pengguna == 'staf')
           <li class="nav-item">
             <a class="nav-link" href="{{ route('pengguna.index') }}">Pengguna</a>
           </li>
+          @endif
+          @if (auth('pengguna')->user()->jabatan_pengguna == 'kabag')
           <li class="nav-item">
             <a class="nav-link" href="#">Laporan</a>
           </li>
+          @endif
         </ul>
       </div>
       <div class="collapse navbar-collapse" id="navbarNav">
