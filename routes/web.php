@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\VisualController;
 use Illuminate\Support\Facades\Route;
@@ -47,5 +48,10 @@ Route::prefix('dashboard')->group(function () {
     Route::controller(VisualController::class)->prefix('visual')->name('visual.')->group(function () {
         Route::get('/data-calon-mahasiswa', 'dataCalonMahasiswa')->name('data.calon.mahasiswa');
         Route::get('/data-sebaran-calon-mahasiswa', 'dataSebaranCalonMahasiswa')->name('data.sebaran.calon.mahasiswa');
+    });
+
+    // route laporan
+    Route::controller(LaporanController::class)->prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/pdf', 'laporanGeneratePDF')->name('pdf');
     });
 });
