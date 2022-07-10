@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('save_sesi', function (Blueprint $table) {
-            $table->bigInteger('no_online');
-            $table->string('no_test');
-            $table->string('path_buktiregis');
-            $table->string('sts_upl_bukti_regis');
+            $table->integer('no_online')->autoIncrement();
+            $table->string('no_test')->nullable();
+            $table->string('path_buktiregis')->nullable();
+            $table->string('sts_upl_buktiregis')->nullable();
             // $table->timestamps();
         });
     }

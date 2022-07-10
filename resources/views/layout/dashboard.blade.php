@@ -69,7 +69,7 @@
           @endif
           @if (auth('pengguna')->user()->jabatan_pengguna == 'kabag')
           <li class="nav-item">
-            <a class="nav-link" href="#">Laporan</a>
+            <a class="nav-link" href="{{ route('laporan.pdf') }}">Laporan</a>
           </li>
           @endif
         </ul>

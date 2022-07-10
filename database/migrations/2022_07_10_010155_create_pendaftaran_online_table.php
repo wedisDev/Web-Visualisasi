@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pendaftaran_online', function (Blueprint $table) {
-            $table->bigInteger('no_online');
+            $table->id('no_online');
             $table->string('nama_mhs');
             $table->string('alamat_mhs');
             $table->string('kota_mhs');
@@ -27,12 +27,12 @@ return new class extends Migration
             $table->string('jur_sma');
             $table->string('pil1');
             $table->string('pil2');
-            $table->string('path_bayar');
-            $table->string('path_kartu');
-            $table->string('path_hasil');
-            $table->string('path_rapor');
-            $table->string('path_foto');
-            $table->string('no_test');
+            $table->string('path_bayar')->nullable();
+            $table->string('path_kartu')->nullable();
+            $table->string('path_hasil')->nullable();
+            $table->string('path_rapor')->nullable();
+            $table->string('path_foto')->nullable();
+            $table->string('no_test')->nullable();
             // $table->timestamps();
         });
     }

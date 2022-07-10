@@ -110,23 +110,30 @@
       const { ctx, chartArea: { left, right, top, bottom, width, height } } = chart;
       ctx.save();
 
+      ctx.font = 'bolder 3rem Arial';
+      ctx.fillStyle = 'black';
+      ctx.textAlign = 'center';
+      // ctx.fillText(`10%`, (width / 2), (height / 2 + top));
+      
       if(chart._active.length > 0){
         const point = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
-
-        ctx.font = 'bolder 4rem Arial';
-        ctx.fillStyle = 'black';
-        ctx.textAlign = 'center';
         ctx.fillText(`${point}%`, (width / 2), (height / 2 + top));
       }
     }
   }
+
+  const unggahBerkasPoint = {!! json_encode($unggah_berkas) !!};
+  const verifikasiBerkasPoint = {!! json_encode($verifikasi_berkas) !!};
+  const membayarRegistrasiPoint = {!! json_encode($membayar_registrasi) !!};
+  
+  console.log({unggahBerkasPoint, verifikasiBerkasPoint, membayarRegistrasiPoint});
 
   new Chart($('#chart_unggah_berkas'), {
     type: 'pie',
     data: {
         labels: ['Sudah', 'Belum'],
         datasets: [{
-            data: [12, 19],
+            data: [unggahBerkasPoint.sudah, unggahBerkasPoint.belum],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)'
@@ -155,7 +162,7 @@
     data: {
         labels: ['Sudah', 'Belum'],
         datasets: [{
-            data: [12, 19],
+            data: [verifikasiBerkasPoint.sudah, verifikasiBerkasPoint.belum],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)'
@@ -184,7 +191,7 @@
     data: {
         labels: ['Sudah', 'Belum'],
         datasets: [{
-            data: [12, 19],
+            data: [membayarRegistrasiPoint.sudah, membayarRegistrasiPoint.belum],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)'
