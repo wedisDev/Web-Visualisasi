@@ -22,13 +22,31 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        Pengguna::create([
-            "id_pengguna" => "ST_001",
-            "nama_pengguna" => "pak budi",
-            "email_pengguna" => "budi@gmail.com",
-            "jabatan_pengguna" => "staf",
-            "username" => "staf",
-            "password" => bcrypt("staf")
+        Pengguna::insert([
+            [
+                "id_pengguna" => "WR_001",
+                "nama_pengguna" => "warek",
+                "email_pengguna" => "warek@gmail.com",
+                "jabatan_pengguna" => "warek",
+                "username" => "warek",
+                "password" => bcrypt("warek")
+            ],
+            [
+                "id_pengguna" => "ST_001",
+                "nama_pengguna" => "staf",
+                "email_pengguna" => "staf@gmail.com",
+                "jabatan_pengguna" => "staf",
+                "username" => "staf",
+                "password" => bcrypt("staf")
+            ],
+            [
+                "id_pengguna" => "KB_001",
+                "nama_pengguna" => "kabag",
+                "email_pengguna" => "kabag@gmail.com",
+                "jabatan_pengguna" => "kabag",
+                "username" => "kabag",
+                "password" => bcrypt("kabag")
+            ]
         ]);
     }
 }
