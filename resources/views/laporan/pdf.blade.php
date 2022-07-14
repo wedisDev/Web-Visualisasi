@@ -41,6 +41,11 @@
         <th>No Online</th>
         <th>No Test</th>
         <th>Nama</th>
+        <th>Path Bayar</th>
+        <th>Path Kartu</th>
+        <th>Path Hasil</th>
+        <th>Path Rapor</th>
+        <th>Path Foto</th>
       </tr>
     </thead>
     <tbody>
@@ -49,6 +54,21 @@
         <td>{{ $loopItem->no_online }}</td>
         <td>{{ $loopItem->no_test ?? '-' }}</td>
         <td>{{ $loopItem->nama_mhs }}</td>
+        <td>
+          <img src="{{ $loopItem->path_bayar }}" alt="{{ $loopItem->nama_mhs }}" width="100" height="100">
+        </td>
+        <td>
+          <img src="{{ $loopItem->path_kartu }}" alt="{{ $loopItem->nama_mhs }}" width="100" height="100">
+        </td>
+        <td>
+          <img src="{{ $loopItem->path_hasil }}" alt="{{ $loopItem->nama_mhs }}" width="100" height="100">
+        </td>
+        <td>
+          <img src="{{ $loopItem->path_rapor }}" alt="{{ $loopItem->nama_mhs }}" width="100" height="100">
+        </td>
+        <td>
+          <img src="{{ $loopItem->path_foto }}" alt="{{ $loopItem->nama_mhs }}" width="100" height="100">
+        </td>
       </tr>
       @endforeach
     </tbody>
