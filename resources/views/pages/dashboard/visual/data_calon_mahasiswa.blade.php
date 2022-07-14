@@ -5,35 +5,49 @@
 <section>
   <div class="container my-4">
     <h1 class="h4">Data Calon Mahasiswa</h1>
-    <div class="row">
+    <div class="row align-items-end">
       <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="search_tahun" class="form-label">Tahun</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input type="text" class="form-control" id="search_tahun" name="search_tahun" placeholder="masukkan tahun">
+        <form action="{{ route('visual.data.calon.mahasiswa') }}" method="GET">
+          <div class="mb-3">
+            <label for="search_tahun" class="form-label">Tahun</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <select class="form-select" id="search_tahun" name="search_tahun">
+                @foreach ($tahun['semua'] as $loopItem)
+                <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-        </div>
+          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+        </form>
       </div>
-      <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="tahun_awal" class="form-label">Tahun Awal</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="text" class="form-control date" id="tahun_awal" name="tahun_awal"
-              placeholder="masukkan tahun awal">
+      <div class="col-lg-6">
+        <form action="{{ route('visual.data.calon.mahasiswa') }}" method="GET">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="tahun_awal" class="form-label">Tahun Awal</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <input type="text" class="form-control date" id="tahun_awal" name="tahun_awal"
+                    placeholder="masukkan tahun awal">
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <input type="text" class="form-control date" id="tahun_akhir" name="tahun_akhir"
+                    placeholder="masukkan tahun akhir">
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="text" class="form-control date" id="tahun_akhir" name="tahun_akhir"
-              placeholder="masukkan tahun akhir">
-          </div>
-        </div>
+          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+        </form>
       </div>
     </div>
     <div class="row mt-5">
@@ -93,15 +107,22 @@
 
 @push('script')
 <script>
+  const tahun = {!! json_encode($tahun) !!};
   $('.date').datepicker({
       changeMonth: false,
       changeYear: true,
       showButtonPanel: true,
       dateFormat: 'yy',
-      // onClose: function(dateText, inst) { 
-      //     const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-      //     $(this).datepicker('setDate', new Date(year, 1));
-      // }
+      yearRange: `${tahun.pertama}:${tahun.akhir}`,
+      onClose: function(data){
+        function isDonePressed() {
+          return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
+        }
+        if (isDonePressed()){
+          const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).datepicker('setDate', new Date(year, 1));
+        }
+      }
   });
 
   const centerPoint = {
@@ -110,10 +131,11 @@
       const { ctx, chartArea: { left, right, top, bottom, width, height } } = chart;
       ctx.save();
 
+      const point = chart.config.data.datasets[0].data[0];
       ctx.font = 'bolder 3rem Arial';
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
-      // ctx.fillText(`10%`, (width / 2), (height / 2 + top));
+      // ctx.fillText(`${point ?? ''}%`, (width / 2), (height / 2 + top));
       
       if(chart._active.length > 0){
         const point = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
@@ -122,184 +144,45 @@
     }
   }
 
-  const unggahBerkasPoint = {!! json_encode($unggah_berkas) !!};
-  const verifikasiBerkasPoint = {!! json_encode($verifikasi_berkas) !!};
-  const membayarRegistrasiPoint = {!! json_encode($membayar_registrasi) !!};
+  const chartsData = {!! json_encode($data) !!};
+  const charts = document.querySelectorAll('canvas');
   
-  console.log({unggahBerkasPoint, verifikasiBerkasPoint, membayarRegistrasiPoint});
+  Array.from(charts).forEach(function(element){
+    const chartData = chartsData[element.id.replace('chart_', '')];
 
-  new Chart($('#chart_unggah_berkas'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [unggahBerkasPoint.sudah, unggahBerkasPoint.belum],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
+    new Chart($(`#${element.id}`), {
+      type: 'pie',
+      data: {
+          labels: ['Sudah', 'Belum'],
+          datasets: [{
+              data: [chartData?.sudah, chartData?.belum],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1,
+              cutout: '60%'
+            }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
           }
-        }
-      },
-      plugins: [centerPoint]
+        },
+        plugins: [centerPoint]
+    });
   });
 
-  new Chart($('#chart_verifikasi_berkas'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [verifikasiBerkasPoint.sudah, verifikasiBerkasPoint.belum],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      },
-      plugins: [centerPoint]
-  });
-
-  new Chart($('#chart_registrasi_berkas'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [membayarRegistrasiPoint.sudah, membayarRegistrasiPoint.belum],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      },
-      plugins: [centerPoint]
-  });
-
-  new Chart($('#chart_registrasi_ulang'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [12, 19],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      },
-      plugins: [centerPoint]
-  });
-
-  new Chart($('#chart_memiliki_nim'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [12, 19],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      },
-      plugins: [centerPoint]
-  });
-
-  new Chart($('#chart_mengundurkan_diri'), {
-    type: 'pie',
-    data: {
-        labels: ['Sudah', 'Belum'],
-        datasets: [{
-            data: [12, 19],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)'
-            ],
-            borderWidth: 1,
-            cutout: '60%'
-          }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom',
-          }
-        }
-      },
-      plugins: [centerPoint]
-  });
+  // function updateChart(){
+  //   chartUnggahBerkas.data.datasets[0].data = [50, 50];
+  //   chartUnggahBerkas.update();
+  // }
 </script>
 @endpush

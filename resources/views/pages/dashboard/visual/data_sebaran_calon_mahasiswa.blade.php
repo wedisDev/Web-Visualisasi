@@ -1,4 +1,5 @@
 @extends('layout.dashboard')
+@section('title', 'Data Sebaran Calon Mahasiswa')
 
 @section('content')
 {{-- data visual --}}
@@ -85,23 +86,31 @@
 
 @push('script')
 <script>
+  const tahun = {!! json_encode($tahun) !!};
   $('.date').datepicker({
       changeMonth: false,
       changeYear: true,
       showButtonPanel: true,
       dateFormat: 'yy',
-      // onClose: function(dateText, inst) { 
-      //     const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-      //     $(this).datepicker('setDate', new Date(year, 1));
-      // }
+      yearRange: `${tahun.pertama}:${tahun.akhir}`,
+      onClose: function(data){
+        function isDonePressed() {
+          return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
+        }
+        if (isDonePressed()){
+          const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+          $(this).datepicker('setDate', new Date(year, 1));
+        }
+      }
   });
 
+  const dataJalurDaftar = {!! json_encode($jalur_daftar) !!};
   new Chart($('#chart_jalur_daftar'), {
     type: 'pie',
     data: {
-        labels: ['Beasiswa', 'Internasional', 'Kerja Sama', 'Tranfer', 'Umum'],
+        labels: dataJalurDaftar.map(data => data.nama_jalur),
         datasets: [{
-            data: [12, 19, 3, 5, 2],
+            data: dataJalurDaftar.map(data => data.count),
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -129,13 +138,15 @@
       }
   });
 
+  const dataProgramStudi = {!! json_encode($program_studi) !!};
+  console.log(dataProgramStudi);
   new Chart($('#chart_program_studi'), {
     type: 'bar',
     data: {
-        labels: ['S1 Teknik Komputer', 'S1 Sistem Informasi', 'S1 Sistem Management', 'S1 Design Produk', 'S1 Design Komunikasi Visual', 'S1 Akuntansi', 'D4 Produksi Film dan Televisi', 'D3 Sistem Informasi'],
+        labels: dataProgramStudi.semua,
         datasets: [{
             label: 'Perempuan',
-            data: [12, 19, 3, 5, 2, 12, 19, 3],
+            data: dataProgramStudi.perempuan,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)'
             ],
@@ -146,7 +157,7 @@
           },
           {
             label: 'Laki - Laki',
-            data: [12, 19, 3, 5, 2, 3, 19, 3, 5],
+            data: dataProgramStudi.laki_laki,
             backgroundColor: [
                 'rgba(255, 206, 86, 0.2)'
             ],

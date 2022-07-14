@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('pendaftaran_online', function (Blueprint $table) {
-            $table->id('no_online');
+            $table->integer('no_online');
             $table->string('nama_mhs');
             $table->string('alamat_mhs');
             $table->string('kota_mhs');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nama_ortu');
             $table->string('hp_ortu');
             $table->string('tahun_lulusan');
+            $table->string('id_jalur');
             $table->string('kota_sma');
             $table->string('asal_sma');
             $table->string('jur_sma');

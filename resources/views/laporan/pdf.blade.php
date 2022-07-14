@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>{{ 'laporan_' . $title }}</title>
   <style>
     table {
       width: 100%;
@@ -19,40 +19,63 @@
       padding: 5px;
     }
 
-    h1 {
-      font-size: 1.2rem;
+    h1,
+    h2 {
       text-align: center;
       text-transform: capitalize;
+    }
+
+    h1 {
+      font-size: 1.2rem;
     }
   </style>
 </head>
 
 <body>
   <h1>data calon mahasiswa</h1>
+  {{-- unggah berkas (sudah) --}}
+  <h2>unggah berkas (sudah)</h2>
   <table>
     <thead>
       <tr>
-        <th>No.</th>
-        <th>Data</th>
-        <th>Sudah</th>
-        <th>Belum</th>
+        <th>No Online</th>
+        <th>No Test</th>
+        <th>Nama</th>
       </tr>
     </thead>
     <tbody>
+      @foreach ($unggah_berkas['sudah'] as $loopItem)
       <tr>
-        <td>1</td>
-        <td>unggah berkas</td>
-        <td>80%</td>
-        <td>30%</td>
+        <td>{{ $loopItem->no_online }}</td>
+        <td>{{ $loopItem->no_test ?? '-' }}</td>
+        <td>{{ $loopItem->nama_mhs }}</td>
       </tr>
-      <tr>
-        <td>2</td>
-        <td>verifikasi berkas</td>
-        <td>80%</td>
-        <td>30%</td>
-      </tr>
+      @endforeach
     </tbody>
   </table>
+  {{-- unggah berkas (sudah) --}}
+
+  {{-- unggah berkas (belum) --}}
+  <h2>unggah berkas (belum)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>No Online</th>
+        <th>No Test</th>
+        <th>Nama</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($unggah_berkas['belum'] as $loopItem)
+      <tr>
+        <td>{{ $loopItem->no_online }}</td>
+        <td>{{ $loopItem->no_test ?? '-' }}</td>
+        <td>{{ $loopItem->nama_mhs }}</td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
+  {{-- unggah berkas (belum) --}}
 </body>
 
 </html>

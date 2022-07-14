@@ -16,7 +16,7 @@
   {{-- form auth --}}
   <main class="form_auth_wrapper">
     <div class="left_side bg-light">
-      <h3 class="text-secondary">hello</h3>
+      <h3 class="text-secondary">Gambar</h3>
     </div>
     <div class="right_side">
       <div class="wrapper">

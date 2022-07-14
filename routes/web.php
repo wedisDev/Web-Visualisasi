@@ -52,6 +52,7 @@ Route::prefix('dashboard')->group(function () {
 
     // route laporan
     Route::controller(LaporanController::class)->prefix('laporan')->name('laporan.')->group(function () {
+        Route::get('/', 'index')->name('index');
         Route::get('/pdf', 'laporanGeneratePDF')->name('pdf');
     });
 });

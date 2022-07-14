@@ -1,4 +1,5 @@
 @extends('layout.dashboard')
+@section('title', 'Beranda')
 
 @section('content')
 {{-- carousel --}}

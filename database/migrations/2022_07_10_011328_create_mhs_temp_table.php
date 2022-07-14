@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('mhs_temp', function (Blueprint $table) {
-            $table->bigInteger('no_online');
+            $table->integer('no_online');
             $table->string('no_test');
             $table->string('nim');
             $table->string('jalur_masuk');
