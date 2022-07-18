@@ -1,4 +1,5 @@
 @extends('layout.dashboard')
+@section('title', 'Data Calon Mahasiswa')
 
 @section('content')
 {{-- data visual --}}
@@ -30,8 +31,11 @@
                 <label for="tahun_awal" class="form-label">Tahun Awal</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                  <input type="text" class="form-control date" id="tahun_awal" name="tahun_awal"
-                    placeholder="masukkan tahun awal">
+                  <select class="form-select" id="tahun_awal" name="tahun_awal">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
             </div>
@@ -40,8 +44,11 @@
                 <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                  <input type="text" class="form-control date" id="tahun_akhir" name="tahun_akhir"
-                    placeholder="masukkan tahun akhir">
+                  <select class="form-select" id="tahun_akhir" name="tahun_akhir">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
             </div>
@@ -70,8 +77,8 @@
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">registrasi berkas</h1>
-            <canvas id="chart_registrasi_berkas"></canvas>
+            <h1 class="h5 text-center text-uppercase">membayar registrasi</h1>
+            <canvas id="chart_membayar_registrasi"></canvas>
           </div>
         </div>
       </div>
@@ -135,12 +142,12 @@
       ctx.font = 'bolder 3rem Arial';
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
-      // ctx.fillText(`${point ?? ''}%`, (width / 2), (height / 2 + top));
+      ctx.fillText(`${point ?? ''}%`, (width / 2), (height / 2 + top));
       
-      if(chart._active.length > 0){
-        const point = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
-        ctx.fillText(`${point}%`, (width / 2), (height / 2 + top));
-      }
+      // if(chart._active.length > 0){
+      //   const point = chart.config.data.datasets[chart._active[0].datasetIndex].data[chart._active[0].index];
+      //   ctx.fillText(`${point}%`, (width / 2), (height / 2 + top));
+      // }
     }
   }
 
@@ -179,10 +186,5 @@
         plugins: [centerPoint]
     });
   });
-
-  // function updateChart(){
-  //   chartUnggahBerkas.data.datasets[0].data = [50, 50];
-  //   chartUnggahBerkas.update();
-  // }
 </script>
 @endpush

@@ -1,4 +1,5 @@
 @extends('layout.dashboard')
+@section('title', 'Ubah Pengguna')
 
 @section('content')
 {{-- pengguna --}}

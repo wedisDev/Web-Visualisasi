@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap demo</title>
+  <title>@yield('title') - {{ env('APP_NAME', 'PENMARU') }}</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
   <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}">
@@ -15,30 +15,7 @@
 
   {{-- form auth --}}
   <main class="form_auth_wrapper">
-    <div class="left_side bg-light">
-      <h3 class="text-secondary">Gambar</h3>
-    </div>
-    <div class="right_side">
-      <div class="wrapper">
-        <img src="{{ asset('assets/images/logo-undika.png') }}" alt="logo undika" class="img-fluid">
-        <form action="{{ route('auth.login.action') }}" method="POST">
-          @csrf
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="masukkan username">
-            @error('username')<small class="text-danger">{{ $message }}</small>@enderror
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="masukkan password">
-            @error('password')<small class="text-danger">{{ $message }}</small>@enderror
-          </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-secondary text-uppercase">Masuk</button>
-          </div>
-        </form>
-      </div>
-    </div>
+    @yield('content')
   </main>
   {{-- form auth --}}
 

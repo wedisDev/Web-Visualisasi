@@ -18,8 +18,7 @@ class LaporanController extends Controller
 
         return view('pages.dashboard.laporan.index', [
             'tahun' => [
-                'pertama' => '20' . $seluruh_tahun[0]['tahun'],
-                'akhir' => '20' . $seluruh_tahun[count($seluruh_tahun) - 1]['tahun']
+                'semua' => $seluruh_tahun
             ]
         ]);
     }
@@ -30,12 +29,19 @@ class LaporanController extends Controller
             'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])->whereNull('no_test')->get(),
             'belum' => PendaftaranOnline::whereNull(['path_foto', 'path_rapor', 'path_bayar'])->get()
         ];
-        // return $unggah_berkas;
 
-        $pdf = Pdf::loadView('laporan.pdf', [
-            'title' => date_format(Carbon::now(), 'dmy'),
-            'unggah_berkas' => $unggah_berkas
-        ])->setPaper('a4', 'landscape');
+        if ($request->get('search_data') == 'data_calon_mahasiswa') {
+            $pdf = Pdf::loadView('laporan.pdf_data_calon_mahasiswa', [
+                'title' => date_format(Carbon::now(), 'dmy'),
+                'unggah_berkas' => $unggah_berkas
+            ])->setPaper('a4', 'landscape');
+        } else if ($request->get('search_data') == 'data_sebaran_calon_mahasiswa') {
+            $pdf = Pdf::loadView('laporan.pdf_data_sebaran_calon_mahasiswa', [
+                'title' => date_format(Carbon::now(), 'dmy'),
+                'unggah_berkas' => $unggah_berkas
+            ])->setPaper('a4', 'landscape');
+        }
+
         return $pdf->stream();
     }
 }

@@ -1,4 +1,5 @@
 @extends('layout.dashboard')
+@section('title', 'Laporan')
 
 @section('content')
 {{-- data laporan --}}
@@ -21,23 +22,29 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg">
+            <div class="col">
               <div class="mb-3">
                 <label for="tahun_awal" class="form-label">Tahun Awal</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                  <input type="text" class="form-control date" id="tahun_awal" name="tahun_awal"
-                    placeholder="masukkan tahun awal">
+                  <select class="form-select" id="tahun_awal" name="tahun_awal">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
             </div>
-            <div class="col-lg">
+            <div class="col">
               <div class="mb-3">
                 <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                  <input type="text" class="form-control date" id="tahun_akhir" name="tahun_akhir"
-                    placeholder="masukkan tahun akhir">
+                  <select class="form-select" id="tahun_akhir" name="tahun_akhir">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
                 </div>
               </div>
             </div>

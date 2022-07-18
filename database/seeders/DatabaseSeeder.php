@@ -114,8 +114,11 @@ class DatabaseSeeder extends Seeder
         // seed pendaftaran online
         for ($i = 0; $i < 250; $i++) {
             $no_test = fake()->randomElement([15, 16, 17, 18, 19, 20]) . fake()->randomElement($jalur_masuk_pmb) . fake()->randomElement([15, 16, 17, 18, 19, 20]) . str_pad(($i + 1), 3, '0', STR_PAD_LEFT);
+            $path_bayar = fake()->randomElement(['https://picsum.photos/100/100', null]);
+            $path_one = fake()->randomElement(['https://picsum.photos/100/100', null]);
+            $path_two = fake()->randomElement(['https://picsum.photos/100/100', null]);
 
-            if ($i % 2 == 0) {
+            if (!empty($path_bayar)) {
                 $pendaftaranOnline = PendaftaranOnline::create([
                     'no_online' => (int) fake()->numerify('###'),
                     'nama_mhs' => fake()->name(),
@@ -131,11 +134,11 @@ class DatabaseSeeder extends Seeder
                     'jur_sma' => fake()->randomElement(['rekayasa perngkat lunak', 'teknik mesin', 'teknik elektro', 'tkj']),
                     'pil1' => fake()->randomElement($prodi),
                     'pil2' => fake()->randomElement($prodi),
-                    'path_bayar' => 'https://picsum.photos/100/100',
-                    'path_kartu' => 'https://picsum.photos/100/100',
-                    'path_hasil' => 'https://picsum.photos/100/100',
-                    'path_rapor' => 'https://picsum.photos/100/100',
-                    'path_foto' => 'https://picsum.photos/100/100',
+                    'path_bayar' => $path_bayar,
+                    'path_kartu' => $path_one,
+                    'path_hasil' => $path_one,
+                    'path_rapor' => $path_two,
+                    'path_foto' => $path_two,
                     'no_test' => fake()->randomElement([$no_test, null])
                 ]);
             } else {
@@ -166,8 +169,8 @@ class DatabaseSeeder extends Seeder
             if (!empty($pendaftaranOnline->no_test)) {
                 SaveSesi::create([
                     'no_test' => $pendaftaranOnline->no_test,
-                    'path_buktiregis' => fake()->randomElement([fake()->imageUrl(), null]),
-                    'sts_upl_buktiregis' => fake()->randomElement([fake()->imageUrl(), null])
+                    'path_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null]),
+                    'sts_upl_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null])
                 ]);
 
                 MhsTemp::create([

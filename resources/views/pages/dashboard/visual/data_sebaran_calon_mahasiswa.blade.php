@@ -6,35 +6,55 @@
 <section>
   <div class="container my-4">
     <h1 class="h4">Data Sebaran Calon Mahasiswa</h1>
-    <div class="row">
+    <div class="row align-items-end">
       <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="search_tahun" class="form-label">Tahun</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-            <input type="text" class="form-control" id="search_tahun" name="search_tahun" placeholder="masukkan tahun">
+        <form action="{{ route('visual.data.sebaran.calon.mahasiswa') }}" method="GET">
+          <div class="mb-3">
+            <label for="search_tahun" class="form-label">Tahun</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+              <select class="form-select" id="search_tahun" name="search_tahun">
+                @foreach ($tahun['semua'] as $loopItem)
+                <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                @endforeach
+              </select>
+            </div>
           </div>
-        </div>
+          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+        </form>
       </div>
-      <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="tahun_awal" class="form-label">Tahun Awal</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="text" class="form-control date" id="tahun_awal" name="tahun_awal"
-              placeholder="masukkan tahun awal">
+      <div class="col-lg-6">
+        <form action="{{ route('visual.data.sebaran.calon.mahasiswa') }}" method="GET">
+          <div class="row">
+            <div class="col">
+              <div class="mb-3">
+                <label for="tahun_awal" class="form-label">Tahun Awal</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <select class="form-select" id="tahun_awal" name="tahun_awal">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="mb-3">
+                <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <select class="form-select" id="tahun_akhir" name="tahun_akhir">
+                    @foreach ($tahun['semua'] as $loopItem)
+                    <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="col-lg-3">
-        <div class="mb-3">
-          <label for="tahun_akhir" class="form-label">Tahun Akhir</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-            <input type="text" class="form-control date" id="tahun_akhir" name="tahun_akhir"
-              placeholder="masukkan tahun akhir">
-          </div>
-        </div>
+          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+        </form>
       </div>
     </div>
     <div class="row mt-5">
