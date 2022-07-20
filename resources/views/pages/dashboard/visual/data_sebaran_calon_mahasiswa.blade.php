@@ -67,34 +67,42 @@
         </div>
       </div>
       <div class="col-lg-8 mb-4">
-        <div class="card h-100">
+        <div class="card">
           <div class="card-body">
             <h1 class="h5 text-center text-uppercase">program studi</h1>
             <canvas id="chart_program_studi"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 mb-4">
-        <div class="card h-100">
+      <div class="col-lg-12 mb-4">
+        <div class="card">
           <div class="card-body">
             <h1 class="h5 text-center text-uppercase">tipe dan status sekolah</h1>
             <canvas id="chart_tipe_dan_status_sekolah"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 mb-4">
-        <div class="card h-100">
+      <div class="col-lg mb-4">
+        <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">kota / kabupaten</h1>
-            <canvas id="chart_kota_atau_kabupaten"></canvas>
+            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
+            <canvas id="chart_jurusan_asal_sekolah_sma"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-lg-4 mb-4">
-        <div class="card h-100">
+      <div class="col-lg mb-4">
+        <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jurusan</h1>
-            <canvas id="chart_memiliki_nim"></canvas>
+            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
+            <canvas id="chart_jurusan_asal_sekolah_smk"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
+            <canvas id="chart_asal_kota_sekolah"></canvas>
           </div>
         </div>
       </div>
@@ -106,24 +114,6 @@
 
 @push('script')
 <script>
-  const tahun = {!! json_encode($tahun) !!};
-  $('.date').datepicker({
-      changeMonth: false,
-      changeYear: true,
-      showButtonPanel: true,
-      dateFormat: 'yy',
-      yearRange: `${tahun.pertama}:${tahun.akhir}`,
-      onClose: function(data){
-        function isDonePressed() {
-          return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
-        }
-        if (isDonePressed()){
-          const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-          $(this).datepicker('setDate', new Date(year, 1));
-        }
-      }
-  });
-
   const dataJalurDaftar = {!! json_encode($jalur_daftar) !!};
   new Chart($('#chart_jalur_daftar'), {
     type: 'pie',
@@ -159,14 +149,13 @@
   });
 
   const dataProgramStudi = {!! json_encode($program_studi) !!};
-  console.log(dataProgramStudi);
   new Chart($('#chart_program_studi'), {
     type: 'bar',
     data: {
         labels: dataProgramStudi.semua,
         datasets: [{
-            label: 'Perempuan',
-            data: dataProgramStudi.perempuan,
+            label: 'Laki - Laki',
+            data: dataProgramStudi.laki_laki,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)'
             ],
@@ -176,8 +165,8 @@
             borderWidth: 1
           },
           {
-            label: 'Laki - Laki',
-            data: dataProgramStudi.laki_laki,
+            label: 'Perempuan',
+            data: dataProgramStudi.perempuan,
             backgroundColor: [
                 'rgba(255, 206, 86, 0.2)'
             ],
@@ -198,13 +187,14 @@
       }
   });
 
+  const dataTipeDanStatusSekolah = {!! json_encode($tipe_dan_status_sekolah) !!};
   new Chart($('#chart_tipe_dan_status_sekolah'), {
     type: 'bar',
     data: {
         labels: ['SMA', 'SMK'],
         datasets: [{
-            label: 'Negri',
-            data: [12, 19],
+            label: 'Negeri',
+            data: [dataTipeDanStatusSekolah.sma.negeri, dataTipeDanStatusSekolah.smk.negeri],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)'
             ],
@@ -215,7 +205,7 @@
           },
           {
             label: 'Swasta',
-            data: [3, 5],
+            data: [dataTipeDanStatusSekolah.sma.swasta, dataTipeDanStatusSekolah.smk.swasta],
             backgroundColor: [
                 'rgba(255, 206, 86, 0.2)'
             ],
@@ -230,6 +220,86 @@
         plugins: {
           legend: {
             position: 'bottom',
+          }
+        }
+      }
+  });
+
+  const dataJurusanAsalSekolah = {!! json_encode($jurusan_asal_sekolah) !!};
+  new Chart($('#chart_jurusan_asal_sekolah_sma'), {
+    type: 'bar',
+    data: {
+        labels: dataJurusanAsalSekolah.sma.label,
+        datasets: [{
+            data: dataJurusanAsalSekolah.sma.data,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1
+          }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+  });
+  new Chart($('#chart_jurusan_asal_sekolah_smk'), {
+    type: 'bar',
+    data: {
+        labels: dataJurusanAsalSekolah.smk.label,
+        datasets: [{
+            data: dataJurusanAsalSekolah.smk.data,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1
+          }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+  });
+
+  const dataAsalKotaSekolah = {!! json_encode($asal_kota_sekolah) !!};
+  console.log(dataAsalKotaSekolah);
+  new Chart($('#chart_asal_kota_sekolah'), {
+    type: 'bar',
+    data: {
+        labels: dataAsalKotaSekolah.label,
+        datasets: [{
+            data: dataAsalKotaSekolah.data,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1
+          }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
           }
         }
       }

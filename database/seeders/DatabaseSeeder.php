@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\HisMf;
 use App\Models\JalurMasukPMB;
 use App\Models\MhsTemp;
 use App\Models\PendaftaranOnline;
@@ -52,7 +53,7 @@ class DatabaseSeeder extends Seeder
         JalurMasukPMB::insert([
             [
                 'id_jalur' => '01',
-                'nama_jalur' => 'Umum'
+                'nama_jalur' => 'Tes'
             ],
             [
                 'id_jalur' => '02',
@@ -60,16 +61,28 @@ class DatabaseSeeder extends Seeder
             ],
             [
                 'id_jalur' => '03',
-                'nama_jalur' => 'Internasional'
+                'nama_jalur' => 'Tanpa Tes'
             ],
             [
                 'id_jalur' => '04',
-                'nama_jalur' => 'Beasiswa'
+                'nama_jalur' => 'Full Scholarship'
             ],
             [
                 'id_jalur' => '05',
-                'nama_jalur' => 'Transfer'
-            ]
+                'nama_jalur' => 'Tranfer'
+            ],
+            [
+                'id_jalur' => '06',
+                'nama_jalur' => 'Tanpa Tes Pameran'
+            ],
+            [
+                'id_jalur' => '07',
+                'nama_jalur' => 'Jalur Pindahan (Tranfer)'
+            ],
+            [
+                'id_jalur' => '08',
+                'nama_jalur' => 'Bidikmisi'
+            ],
         ]);
 
         // seed prodi mf
@@ -108,86 +121,98 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        $jalur_masuk_pmb = JalurMasukPMB::pluck('id_jalur');
-        $prodi = ProdiMf::pluck('nama_prodi');
+        // seed his mf
+        $his_mf = MhsTemp::whereNotNull('nim')->take(10)->get();
+
+        foreach ($his_mf as $loopItem) {
+            HisMf::create([
+                'nim' => $loopItem->nim,
+                'smt' => 2,
+                'sts' => fake()->randomElement(['Keluar', 'Aktif'])
+            ]);
+        }
+
+
+        // $jalur_masuk_pmb = JalurMasukPMB::pluck('id_jalur');
+        // $prodi = ProdiMf::pluck('nama_prodi');
 
         // seed pendaftaran online
-        for ($i = 0; $i < 250; $i++) {
-            $no_test = fake()->randomElement([15, 16, 17, 18, 19, 20]) . fake()->randomElement($jalur_masuk_pmb) . fake()->randomElement([15, 16, 17, 18, 19, 20]) . str_pad(($i + 1), 3, '0', STR_PAD_LEFT);
-            $path_bayar = fake()->randomElement(['https://picsum.photos/100/100', null]);
-            $path_one = fake()->randomElement(['https://picsum.photos/100/100', null]);
-            $path_two = fake()->randomElement(['https://picsum.photos/100/100', null]);
+        // for ($i = 0; $i < 250; $i++) {
+        //     $no_test = fake()->randomElement([15, 16, 17, 18, 19, 20]) . fake()->randomElement($jalur_masuk_pmb) . fake()->randomElement([15, 16, 17, 18, 19, 20]) . str_pad(($i + 1), 3, '0', STR_PAD_LEFT);
+        //     $path_bayar = fake()->randomElement(['https://picsum.photos/100/100', null]);
+        //     $path_one = fake()->randomElement(['https://picsum.photos/100/100', null]);
+        //     $path_two = fake()->randomElement(['https://picsum.photos/100/100', null]);
 
-            if (!empty($path_bayar)) {
-                $pendaftaranOnline = PendaftaranOnline::create([
-                    'no_online' => (int) fake()->numerify('###'),
-                    'nama_mhs' => fake()->name(),
-                    'alamat_mhs' => fake()->address(),
-                    'kota_mhs' => fake()->city(),
-                    'email' => fake()->email(),
-                    'nama_ortu' => fake()->randomElement(['supriadi', 'maryono', 'budi', 'agustinus', 'achmad']),
-                    'hp_ortu' => fake()->phoneNumber(),
-                    'tahun_lulusan' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
-                    'id_jalur' => fake()->randomElement($jalur_masuk_pmb),
-                    'kota_sma' => fake()->city(),
-                    'asal_sma' => 'sma negri surabaya 1',
-                    'jur_sma' => fake()->randomElement(['rekayasa perngkat lunak', 'teknik mesin', 'teknik elektro', 'tkj']),
-                    'pil1' => fake()->randomElement($prodi),
-                    'pil2' => fake()->randomElement($prodi),
-                    'path_bayar' => $path_bayar,
-                    'path_kartu' => $path_one,
-                    'path_hasil' => $path_one,
-                    'path_rapor' => $path_two,
-                    'path_foto' => $path_two,
-                    'no_test' => fake()->randomElement([$no_test, null])
-                ]);
-            } else {
-                $pendaftaranOnline = PendaftaranOnline::create([
-                    'no_online' => (int) fake()->numerify('###'),
-                    'nama_mhs' => fake()->name(),
-                    'alamat_mhs' => fake()->address(),
-                    'kota_mhs' => fake()->city(),
-                    'email' => fake()->email(),
-                    'nama_ortu' => fake()->randomElement(['supriadi', 'maryono', 'budi', 'agustinus', 'achmad']),
-                    'hp_ortu' => fake()->phoneNumber(),
-                    'tahun_lulusan' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
-                    'id_jalur' => fake()->randomElement($jalur_masuk_pmb),
-                    'kota_sma' => fake()->city(),
-                    'asal_sma' => 'sma negri surabaya 1',
-                    'jur_sma' => fake()->randomElement(['rekayasa perngkat lunak', 'teknik mesin', 'teknik elektro', 'tkj']),
-                    'pil1' => fake()->randomElement($prodi),
-                    'pil2' => fake()->randomElement($prodi),
-                    'path_bayar' => null,
-                    'path_kartu' => null,
-                    'path_hasil' => null,
-                    'path_rapor' => null,
-                    'path_foto' => null,
-                    'no_test' => fake()->randomElement([$no_test, null])
-                ]);
-            }
+        //     if (!empty($path_bayar)) {
+        //         $pendaftaranOnline = PendaftaranOnline::create([
+        //             'no_online' => (int) fake()->numerify('###'),
+        //             'nama_mhs' => fake()->name(),
+        //             'alamat_mhs' => fake()->address(),
+        //             'kota_mhs' => fake()->city(),
+        //             'email' => fake()->email(),
+        //             'nama_ortu' => fake()->randomElement(['supriadi', 'maryono', 'budi', 'agustinus', 'achmad']),
+        //             'hp_ortu' => fake()->phoneNumber(),
+        //             'tahun_lulusan' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
+        //             'id_jalur' => fake()->randomElement($jalur_masuk_pmb),
+        //             'kota_sma' => fake()->city(),
+        //             'asal_sma' => 'sma negri surabaya 1',
+        //             'jur_sma' => fake()->randomElement(['rekayasa perngkat lunak', 'teknik mesin', 'teknik elektro', 'tkj']),
+        //             'pil1' => fake()->randomElement($prodi),
+        //             'pil2' => fake()->randomElement($prodi),
+        //             'path_bayar' => $path_bayar,
+        //             'path_kartu' => $path_one,
+        //             'path_hasil' => $path_one,
+        //             'path_rapor' => $path_two,
+        //             'path_foto' => $path_two,
+        //             'no_test' => fake()->randomElement([$no_test, null])
+        //         ]);
+        //     } else {
+        //         $pendaftaranOnline = PendaftaranOnline::create([
+        //             'no_online' => (int) fake()->numerify('###'),
+        //             'nama_mhs' => fake()->name(),
+        //             'alamat_mhs' => fake()->address(),
+        //             'kota_mhs' => fake()->city(),
+        //             'email' => fake()->email(),
+        //             'nama_ortu' => fake()->randomElement(['supriadi', 'maryono', 'budi', 'agustinus', 'achmad']),
+        //             'hp_ortu' => fake()->phoneNumber(),
+        //             'tahun_lulusan' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
+        //             'id_jalur' => fake()->randomElement($jalur_masuk_pmb),
+        //             'kota_sma' => fake()->city(),
+        //             'asal_sma' => 'sma negri surabaya 1',
+        //             'jur_sma' => fake()->randomElement(['rekayasa perngkat lunak', 'teknik mesin', 'teknik elektro', 'tkj']),
+        //             'pil1' => fake()->randomElement($prodi),
+        //             'pil2' => fake()->randomElement($prodi),
+        //             'path_bayar' => null,
+        //             'path_kartu' => null,
+        //             'path_hasil' => null,
+        //             'path_rapor' => null,
+        //             'path_foto' => null,
+        //             'no_test' => fake()->randomElement([$no_test, null])
+        //         ]);
+        //     }
 
-            if (!empty($pendaftaranOnline->no_test)) {
-                SaveSesi::create([
-                    'no_test' => $pendaftaranOnline->no_test,
-                    'path_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null]),
-                    'sts_upl_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null])
-                ]);
+        //     if (!empty($pendaftaranOnline->no_test)) {
+        //         SaveSesi::create([
+        //             'no_test' => $pendaftaranOnline->no_test,
+        //             'path_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null]),
+        //             'sts_upl_buktiregis' => fake()->randomElement(['https://picsum.photos/100/100', null])
+        //         ]);
 
-                MhsTemp::create([
-                    'no_online' => $pendaftaranOnline->no_online,
-                    'no_test' => $pendaftaranOnline->no_test,
-                    'nim' => fake()->numerify('###########'),
-                    'jalur_masuk' => $pendaftaranOnline->id_jalur,
-                    'thn_masuk' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
-                    'nama_mhs' => $pendaftaranOnline->nama_mhs,
-                    'sex' => fake()->randomElement([0, 1]),
-                    'pil1' => $pendaftaranOnline->pil1,
-                    'pil2' => $pendaftaranOnline->pil2,
-                    'kota_sma' => $pendaftaranOnline->kota_sma,
-                    'asal_sma' => $pendaftaranOnline->asal_sma,
-                    'jur_sma' => $pendaftaranOnline->jur_sma
-                ]);
-            }
-        }
+        //         MhsTemp::create([
+        //             'no_online' => $pendaftaranOnline->no_online,
+        //             'no_test' => $pendaftaranOnline->no_test,
+        //             'nim' => fake()->numerify('###########'),
+        //             'jalur_masuk' => $pendaftaranOnline->id_jalur,
+        //             'thn_masuk' => fake()->randomElement(['2015', '2016', '2017', '2018', '2019', '2020']),
+        //             'nama_mhs' => $pendaftaranOnline->nama_mhs,
+        //             'sex' => fake()->randomElement([0, 1]),
+        //             'pil1' => $pendaftaranOnline->pil1,
+        //             'pil2' => $pendaftaranOnline->pil2,
+        //             'kota_sma' => $pendaftaranOnline->kota_sma,
+        //             'asal_sma' => $pendaftaranOnline->asal_sma,
+        //             'jur_sma' => $pendaftaranOnline->jur_sma
+        //         ]);
+        //     }
+        // }
     }
 }

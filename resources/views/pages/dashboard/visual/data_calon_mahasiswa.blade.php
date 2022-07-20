@@ -114,24 +114,6 @@
 
 @push('script')
 <script>
-  const tahun = {!! json_encode($tahun) !!};
-  $('.date').datepicker({
-      changeMonth: false,
-      changeYear: true,
-      showButtonPanel: true,
-      dateFormat: 'yy',
-      yearRange: `${tahun.pertama}:${tahun.akhir}`,
-      onClose: function(data){
-        function isDonePressed() {
-          return ($('#ui-datepicker-div').html().indexOf('ui-datepicker-close ui-state-default ui-priority-primary ui-corner-all ui-state-hover') > -1);
-        }
-        if (isDonePressed()){
-          const year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-          $(this).datepicker('setDate', new Date(year, 1));
-        }
-      }
-  });
-
   const centerPoint = {
     id: 'center_point',
     afterDraw(chart, args, options){

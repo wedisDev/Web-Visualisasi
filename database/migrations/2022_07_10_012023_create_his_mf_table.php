@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('his_mf', function (Blueprint $table) {
             $table->string('nim');
             $table->string('smt');
-            $table->integer('sts');
+            $table->string('sts');
             // $table->timestamps();
         });
     }

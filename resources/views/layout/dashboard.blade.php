@@ -62,7 +62,7 @@
                   Mahasiswa</a></li>
             </ul>
           </li>
-          @if (auth('pengguna')->user()->jabatan_pengguna == 'staf')
+          @if (auth('pengguna')->user()->jabatan_pengguna == 'kabag')
           <li class="nav-item">
             <a class="nav-link" href="{{ route('pengguna.index') }}">Pengguna</a>
           </li>
