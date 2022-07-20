@@ -74,6 +74,9 @@
           </div>
         </div>
       </div>
+      <div class="prodi_all row">
+        <h1 class="h5 mb-4 text-center text-uppercase">program studi</h1>
+      </div>
       <div class="col-lg-12 mb-4">
         <div class="card">
           <div class="card-body">
@@ -225,6 +228,48 @@
       }
   });
 
+  const dataProdiAll = {!! json_encode($prodi_all) !!};
+  dataProdiAll.forEach(function(prodi){
+    $('.prodi_all').append(`
+      <div class="col-lg-3 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h1 class="h6 text-center text-uppercase">${prodi.prodi}</h1>
+            <canvas id="chart_prodi_${prodi.chart_id}" class="w-100"></canvas>
+          </div>
+        </div>
+      </div>
+    `);
+
+    new Chart($(`#chart_prodi_${prodi.chart_id}`), {
+      type: 'pie',
+      data: {
+          labels: ['Laki - Laki', 'Perempuan'],
+          datasets: [{
+              data: [prodi.laki_laki, prodi.perempuan],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)'
+              ],
+              borderWidth: 1
+            }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+            }
+          }
+        }
+    });
+  });
+
   const dataJurusanAsalSekolah = {!! json_encode($jurusan_asal_sekolah) !!};
   new Chart($('#chart_jurusan_asal_sekolah_sma'), {
     type: 'bar',
@@ -278,7 +323,6 @@
   });
 
   const dataAsalKotaSekolah = {!! json_encode($asal_kota_sekolah) !!};
-  console.log(dataAsalKotaSekolah);
   new Chart($('#chart_asal_kota_sekolah'), {
     type: 'bar',
     data: {

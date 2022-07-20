@@ -202,6 +202,7 @@ class VisualController extends Controller
             ->orderBy('tahun', 'ASC')->distinct()->get();
 
         $prodi = ProdiMf::orderBy('nama_prodi')->get();
+        $prodi_all = [];
         $prodi_laki_laki = [];
         $prodi_perempuan = [];
 
@@ -387,6 +388,15 @@ class VisualController extends Controller
                     'count' => DB::select("SELECT COUNT(mt.nim) as count
                     FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count
                 ];
+
+                $prodi_all[] = [
+                    'prodi' => $loopItem->nama_prodi,
+                    'chart_id' => str_replace(' ', '_', strtolower($loopItem->nama_prodi)),
+                    'laki_laki' => DB::select("SELECT COUNT(mt.nim) as count
+                    FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count,
+                    'perempuan' => DB::select("SELECT COUNT(mt.nim) as count
+                    FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count
+                ];
             }
 
             $tipe_dan_status_sekolah = [
@@ -450,6 +460,7 @@ class VisualController extends Controller
         return view('pages.dashboard.visual.data_sebaran_calon_mahasiswa', [
             'jalur_daftar' => $jalur_daftar,
             'program_studi' => $program_studi,
+            'prodi_all' => $prodi_all,
             'tipe_dan_status_sekolah' => $tipe_dan_status_sekolah,
             'jurusan_asal_sekolah' => $jurusan_asal_sekolah,
             'asal_kota_sekolah' => $asal_kota_sekolah,
