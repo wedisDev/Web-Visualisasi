@@ -10,6 +10,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url('../images/img-login.png');
+  background-size: cover;
 }
 
 .form_auth_wrapper .right_side{
@@ -36,6 +38,14 @@
 .carousel-item img{
   object-fit: cover!important;
   height: 80vh!important;
+}
+
+.hero_section {
+  height: 80vh;
+  background-image: url('../images/img-carousel.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .card_visual{

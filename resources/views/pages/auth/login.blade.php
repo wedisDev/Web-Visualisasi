@@ -2,9 +2,7 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="left_side bg-light">
-  <h3 class="text-secondary">Gambar</h3>
-</div>
+<div class="left_side"></div>
 <div class="right_side">
   <div class="wrapper">
     <img src="{{ asset('assets/images/logo-undika.png') }}" alt="logo undika" class="img-fluid">

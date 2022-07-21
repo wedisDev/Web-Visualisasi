@@ -38,7 +38,7 @@
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container d-flex justify-content-between">
       <a class="navbar-brand" href="{{ route('dashboard.index') }}">
-        <img src="{{ asset('assets/images/logo-undika.png') }}" alt="logo undika" height="50px">
+        <img src="{{ asset('assets/images/visit-penmaru.png') }}" alt="logo visit penmaru" height="40px">
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,12 +64,12 @@
           </li>
           @if (auth('pengguna')->user()->jabatan_pengguna == 'kabag')
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('pengguna.index') }}">Pengguna</a>
+            <a class="nav-link" href="{{ route('laporan.index') }}">Laporan</a>
           </li>
           @endif
           @if (auth('pengguna')->user()->jabatan_pengguna == 'kabag')
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('laporan.index') }}">Laporan</a>
+            <a class="nav-link" href="{{ route('pengguna.index') }}">Pengguna</a>
           </li>
           @endif
         </ul>

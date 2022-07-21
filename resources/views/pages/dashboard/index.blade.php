@@ -2,9 +2,9 @@
 @section('title', 'Beranda')
 
 @section('content')
-{{-- carousel --}}
-<section>
-  <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+{{-- hero --}}
+<section class="hero_section">
+  {{-- <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="{{ asset('assets/images/carousel/slide-1.jpg') }}" class="d-block w-100" alt="carousel slide 1">
@@ -24,9 +24,9 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
-  </div>
+  </div> --}}
 </section>
-{{-- carousel --}}
+{{-- hero --}}
 
 {{-- visualisasi --}}
 <section>
