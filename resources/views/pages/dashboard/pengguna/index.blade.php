@@ -6,7 +6,7 @@
 <section>
   <div class="container my-4">
     <h1 class="h4">Pencatatan Pengguna</h1>
-    <a href="{{ route('pengguna.create.view') }}" class="btn btn-light mt-5 mb-4">Tambah Pengguna</a>
+    <a href="{{ route('pengguna.create.view') }}" class="btn btn-primary mt-5 mb-4">Tambah Pengguna</a>
     <div class="table-responsive">
       <table id="table_pengguna" class="table table-striped" style="width:100%">
         <thead>
