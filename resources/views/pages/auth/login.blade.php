@@ -5,7 +5,7 @@
 <div class="left_side"></div>
 <div class="right_side">
   <div class="wrapper">
-    <img src="{{ asset('assets/images/logo-undika.png') }}" alt="logo undika" class="img-fluid">
+    <img src="{{ asset('assets/images/visit-penmaru.png') }}" alt="logo visit penmaru" height="80px" class="mb-4">
     <form action="{{ route('auth.login.action') }}" method="POST">
       @csrf
       <div class="mb-3">
