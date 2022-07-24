@@ -88,7 +88,11 @@
       <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}" class="btn btn-light text-capitalize">see
+                more</a>
+            </div>
             <canvas id="chart_jurusan_asal_sekolah_sma"></canvas>
           </div>
         </div>
@@ -96,7 +100,11 @@
       <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}" class="btn btn-light text-capitalize">see
+                more</a>
+            </div>
             <canvas id="chart_jurusan_asal_sekolah_smk"></canvas>
           </div>
         </div>
@@ -104,7 +112,10 @@
       <div class="col-lg-12 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
+              <a href="{{ route('visual.data.asal.kota.sekolah') }}" class="btn btn-light text-capitalize">see more</a>
+            </div>
             <canvas id="chart_asal_kota_sekolah"></canvas>
           </div>
         </div>
