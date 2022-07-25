@@ -77,34 +77,65 @@
       <div class="prodi_all row">
         <h1 class="h5 mb-4 text-center text-uppercase">program studi</h1>
       </div>
-      <div class="col-lg-12 mb-4">
+      <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">tipe dan status sekolah</h1>
-            <canvas id="chart_tipe_dan_status_sekolah"></canvas>
+            <h1 class="h5 text-center text-uppercase">tipe dan status sekolah (SMA & SMK)</h1>
+            <canvas id="chart_tipe_dan_status_sekolah_sma_and_smk"></canvas>
           </div>
         </div>
       </div>
       <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
+            <h1 class="h5 text-center text-uppercase">tipe dan status sekolah (MA & Lain - Lain)</h1>
+            <canvas id="chart_tipe_dan_status_sekolah_ma_and_lain_lain"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}" class="btn btn-light text-capitalize">see
+                more</a>
+            </div>
             <canvas id="chart_jurusan_asal_sekolah_sma"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-lg mb-4">
+      <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (MA)</h1>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.ma') }}" class="btn btn-light text-capitalize">see
+                more</a>
+            </div>
+            <canvas id="chart_jurusan_asal_sekolah_ma"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}" class="btn btn-light text-capitalize">see
+                more</a>
+            </div>
             <canvas id="chart_jurusan_asal_sekolah_smk"></canvas>
           </div>
         </div>
       </div>
-      <div class="col-lg-12 mb-4">
+      <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
+              <a href="{{ route('visual.data.asal.kota.sekolah') }}" class="btn btn-light text-capitalize">see more</a>
+            </div>
             <canvas id="chart_asal_kota_sekolah"></canvas>
           </div>
         </div>
@@ -191,7 +222,7 @@
   });
 
   const dataTipeDanStatusSekolah = {!! json_encode($tipe_dan_status_sekolah) !!};
-  new Chart($('#chart_tipe_dan_status_sekolah'), {
+  new Chart($('#chart_tipe_dan_status_sekolah_sma_and_smk'), {
     type: 'bar',
     data: {
         labels: ['SMA', 'SMK'],
@@ -222,6 +253,33 @@
         responsive: true,
         plugins: {
           legend: {
+            position: 'bottom',
+          }
+        }
+      }
+  });
+  new Chart($('#chart_tipe_dan_status_sekolah_ma_and_lain_lain'), {
+    type: 'bar',
+    data: {
+        labels: ['MA', 'Lain - Lain'],
+        datasets: [{
+            data: [dataTipeDanStatusSekolah.ma, dataTipeDanStatusSekolah.lain_lain],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(255, 206, 86, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+          },]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
             position: 'bottom',
           }
         }
@@ -296,6 +354,31 @@
         }
       }
   });
+  new Chart($('#chart_jurusan_asal_sekolah_ma'), {
+    type: 'bar',
+    data: {
+        labels: dataJurusanAsalSekolah.ma.label,
+        datasets: [{
+            data: dataJurusanAsalSekolah.ma.data,
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)'
+            ],
+            borderWidth: 1
+          }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+  });
   new Chart($('#chart_jurusan_asal_sekolah_smk'), {
     type: 'bar',
     data: {
@@ -323,6 +406,7 @@
   });
 
   const dataAsalKotaSekolah = {!! json_encode($asal_kota_sekolah) !!};
+  console.log(dataAsalKotaSekolah);
   new Chart($('#chart_asal_kota_sekolah'), {
     type: 'bar',
     data: {
