@@ -52,6 +52,7 @@ Route::prefix('dashboard')->group(function () {
         Route::prefix('detail')->group(function () {
             Route::get('/asal-kota-sekolah', 'asalKotaSekolah')->name('data.asal.kota.sekolah');
             Route::get('/jurusan-asal-sekolah-sma', 'jurusanAsalSekolahSma')->name('data.jurusan.asal.sekolah.sma');
+            Route::get('/jurusan-asal-sekolah-ma', 'jurusanAsalSekolahMa')->name('data.jurusan.asal.sekolah.ma');
             Route::get('/jurusan-asal-sekolah-smk', 'jurusanAsalSekolahSmk')->name('data.jurusan.asal.sekolah.smk');
         });
     });
