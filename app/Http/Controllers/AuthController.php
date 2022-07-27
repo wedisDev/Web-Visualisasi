@@ -22,7 +22,7 @@ class AuthController extends Controller
         if (Auth::guard('pengguna')->attempt($request->only(['username', 'password']))) {
             return redirect()->route('dashboard.index');
         } else {
-            return redirect()->back();
+            return redirect()->back()->with(['message' => 'username atau password salah!']);
         }
     }
 

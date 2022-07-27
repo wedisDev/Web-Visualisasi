@@ -268,31 +268,31 @@ class VisualController extends Controller
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'ma' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'smk' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43') AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ]
             ];
 
@@ -300,11 +300,11 @@ class VisualController extends Controller
                 'label' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                                     FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
                                     WHERE SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                                    GROUP BY km.nama"))->take(5)->pluck('nama_kota'),
+                                    GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('nama_kota'),
                 'data' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                                     FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
                                     WHERE SUBSTR(po.no_test, 0, 2) = '$search_tahun'
-                                    GROUP BY km.nama"))->take(5)->pluck('count')
+                                    GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
         } elseif ($request->has('tahun_awal') && $request->has('tahun_akhir')) {
             $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(ss.no_test) as count FROM jalur_masuk_pmb jmp 
@@ -364,31 +364,31 @@ class VisualController extends Controller
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'ma' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'smk' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43') AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ]
             ];
 
@@ -396,11 +396,11 @@ class VisualController extends Controller
                 'label' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
                             WHERE SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY km.nama"))->take(5)->pluck('nama_kota'),
+                            GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('nama_kota'),
                 'data' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
                             WHERE SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-                            GROUP BY km.nama"))->take(5)->pluck('count')
+                            GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
         } else {
             $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(ss.no_test) as count FROM jalur_masuk_pmb jmp 
@@ -460,41 +460,41 @@ class VisualController extends Controller
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','17','70')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'ma' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN IN ('15','16','70')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'smk' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('nama_jurusan'),
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43')
-                            GROUP BY js.nama ORDER BY nama_jurusan ASC"))->take(5)->pluck('count')
+                            GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ]
             ];
 
             $asal_kota_sekolah = [
                 'label' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
-                            GROUP BY km.nama"))->take(5)->pluck('nama_kota'),
+                            GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('nama_kota'),
                 'data' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
-                            GROUP BY km.nama"))->take(5)->pluck('count')
+                            GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
         }
 
@@ -521,7 +521,7 @@ class VisualController extends Controller
     {
         $asal_kota_sekolah = collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
         FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
-        GROUP BY km.nama"));
+        GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"));
 
         return view('pages.dashboard.visual.detail_asal_kota_sekolah', [
             'asal_kota_sekolah' => $asal_kota_sekolah
