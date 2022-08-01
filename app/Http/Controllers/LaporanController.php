@@ -14,7 +14,7 @@ class LaporanController extends Controller
     public function index()
     {
         $seluruh_tahun = PendaftaranOnline::whereNotNull('no_test')
-            ->select(DB::raw("SUBSTR(no_test, 0, 2) as tahun"))
+            ->select(DB::raw("SUBSTR(no_online, 3, 2) as tahun"))
             ->orderBy('tahun', 'ASC')->distinct()->get();
 
         return view('pages.dashboard.laporan.index', [

@@ -15,9 +15,8 @@ class VisualController extends Controller
 {
     public function dataCalonMahasiswa(Request $request)
     {
-        $total_pendaftar = PendaftaranOnline::count();
         $seluruh_tahun = PendaftaranOnline::whereNotNull('no_test')
-            ->select(DB::raw("SUBSTR(no_test, 0, 2) as tahun"))
+            ->select(DB::raw("SUBSTR(no_online, 3, 2) as tahun"))
             ->orderBy('tahun', 'ASC')->distinct()->get();
 
         $search_tahun = substr($request->get('search_tahun'), -2);
@@ -25,44 +24,50 @@ class VisualController extends Controller
         $tahun_akhir = substr($request->get('tahun_akhir'), -2);
 
         if ($request->has('search_tahun')) {
-            // $unggah_berkas = [
-            //     'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
-            //         ->whereNull('no_test')->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-            //     'belum' => PendaftaranOnline::whereNull(['path_foto', 'path_rapor', 'path_bayar'])
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
-            // ];
-            // $verifikasi_berkas = [
-            //     'sudah' => PendaftaranOnline::whereNotNull('no_test')
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-            //     'belum' => PendaftaranOnline::whereNull('no_test')
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
-            // ];
+            $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_online, 3, 2)"), '=', $search_tahun)->count();
+
             $unggah_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
                     ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-                'belum' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
-                    ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
+                'belum' => count(DB::select("SELECT * FROM PENDAFTARAN_ONLINE po1
+                    WHERE PATH_FOTO IS NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NULL
+                    AND NO_TEST IS NULL
+                    AND SUBSTR(po1.no_online, 3, 2) = '$search_tahun'
+                    UNION (SELECT * FROM PENDAFTARAN_ONLINE po2
+                    WHERE PATH_FOTO IS NOT NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NOT NULL
+                    AND NO_TEST IS NULL
+                    AND SUBSTR(po2.no_online, 3, 2) = '$search_tahun'
+                    UNION (SELECT * FROM PENDAFTARAN_ONLINE po3
+                    WHERE PATH_FOTO IS NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NOT NULL
+                    AND NO_TEST IS NULL
+                    AND SUBSTR(po3.no_online, 3, 2) = '$search_tahun'))"))
             ];
             $verifikasi_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull('no_test')
                     ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-                'belum' => PendaftaranOnline::where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
+                'belum' => PendaftaranOnline::whereNull('no_test')->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
             ];
             $membayar_registrasi = [
                 'sudah' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
                             FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
-                            WHERE ss.sts_upl_buktiregis IS NOT NULL
+                            WHERE ss.sts_upl_buktiregis IS NOT NULL AND ss.path_buktiregis IS NOT NULL
                             AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'")),
                 'belum' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
                             FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
-                            WHERE ss.sts_upl_buktiregis IS NULL
+                            WHERE ss.sts_upl_buktiregis IS NULL AND ss.path_buktiregis IS NULL
                             AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'"))
             ];
             $registrasi_ulang = [
-                'sudah' => count(DB::select("SELECT * FROM pendaftaran_online po 
-                WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = po.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')")),
-                'belum' => count(DB::select("SELECT * FROM pendaftaran_online po 
-                WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = po.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')"))
+                'sudah' => count(DB::select("SELECT * FROM save_sesi ss 
+                    WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')")),
+                'belum' => count(DB::select("SELECT * FROM save_sesi ss 
+                    WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')"))
             ];
             $memiliki_nim = [
                 'sudah' => MhsTemp::whereNotNull('nim')
@@ -71,50 +76,57 @@ class VisualController extends Controller
                     ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
             ];
             $mengundurkan_diri = [
-                'sudah' => collect(DB::select("SELECT mt.no_test FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.nim
-                        WHERE SUBSTR(mt.no_test, 0, 2) = '$search_tahun' AND (hm.semester = 2 AND hm.sts_mhs = 'O')"))->count(),
-                'belum' => collect(DB::select("SELECT mt.no_test FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.nim
-                        WHERE SUBSTR(mt.no_test, 0, 2) = '$search_tahun' AND (hm.semester = 2 AND hm.sts_mhs = '')"))->count()
+                'sudah' => HisMf::where('semester', '=', '211')->where('sts_mhs', '=', 'O')
+                    ->where(DB::raw("SUBSTR(mhs_nim, 0, 2)"), '=', $search_tahun)->count(),
+                'belum' => HisMf::where('semester', '=', '211')->whereNull('sts_mhs')
+                    ->where(DB::raw("SUBSTR(mhs_nim, 0, 2)"), '=', $search_tahun)->count(),
             ];
         } elseif ($request->has('tahun_awal') && $request->has('tahun_akhir')) {
-            // $unggah_berkas = [
-            //     'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
-            //         ->whereNull('no_test')->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-            //     'belum' => PendaftaranOnline::whereNull(['path_foto', 'path_rapor', 'path_bayar'])
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
-            // ];
-            // $verifikasi_berkas = [
-            //     'sudah' => PendaftaranOnline::whereNotNull('no_test')
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count(),
-            //     'belum' => PendaftaranOnline::whereNull('no_test')
-            //         ->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
-            // ];
+            $total_pendaftar = PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_online, 3, 2)"), [$tahun_awal, $tahun_akhir])->count();
+
             $unggah_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
                     ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count(),
-                'belum' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
-                    ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
+                'belum' => count(DB::select("SELECT * FROM PENDAFTARAN_ONLINE po1
+                WHERE PATH_FOTO IS NULL
+                AND PATH_RAPOR IS NULL
+                AND PATH_BAYAR IS NULL
+                AND NO_TEST IS NULL
+                AND SUBSTR(po1.no_online, 3, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
+                UNION (SELECT * FROM PENDAFTARAN_ONLINE po2
+                WHERE PATH_FOTO IS NOT NULL
+                AND PATH_RAPOR IS NULL
+                AND PATH_BAYAR IS NOT NULL
+                AND NO_TEST IS NULL
+                AND SUBSTR(po2.no_online, 3, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
+                UNION (SELECT * FROM PENDAFTARAN_ONLINE po3
+                WHERE PATH_FOTO IS NULL
+                AND PATH_RAPOR IS NULL
+                AND PATH_BAYAR IS NOT NULL
+                AND NO_TEST IS NULL
+                AND SUBSTR(po3.no_online, 3, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'))"))
             ];
             $verifikasi_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull('no_test')
                     ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count(),
-                'belum' => PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
+                'belum' => PendaftaranOnline::whereNull('no_test')
+                    ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
             ];
             $membayar_registrasi = [
                 'sudah' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
                             FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
-                            WHERE ss.sts_upl_buktiregis IS NOT NULL
+                            WHERE ss.sts_upl_buktiregis IS NOT NULL AND ss.path_buktiregis IS NOT NULL
                             AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'")),
                 'belum' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
                             FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
-                            WHERE ss.sts_upl_buktiregis IS NULL
+                            WHERE ss.sts_upl_buktiregis IS NULL AND ss.path_buktiregis IS NULL
                             AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))
             ];
             $registrasi_ulang = [
-                'sudah' => count(DB::select("SELECT * FROM pendaftaran_online po 
-                WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = po.no_test AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')")),
-                'belum' => count(DB::select("SELECT * FROM pendaftaran_online po 
-                WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = po.no_test AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')"))
+                'sudah' => count(DB::select("SELECT * FROM save_sesi ss 
+                WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')")),
+                'belum' => count(DB::select("SELECT * FROM save_sesi ss 
+                WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')"))
             ];
             $memiliki_nim = [
                 'sudah' => MhsTemp::whereNotNull('nim')
@@ -123,24 +135,31 @@ class VisualController extends Controller
                     ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
             ];
             $mengundurkan_diri = [
-                'sudah' => collect(DB::select("SELECT mt.no_test FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.nim
-                        WHERE SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir' AND (hm.semester = 2 AND hm.sts_mhs = 'O')"))->count(),
-                'belum' => collect(DB::select("SELECT mt.no_test FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.nim
-                        WHERE SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir' AND (hm.semester = 2 AND hm.sts_mhs = '')"))->count()
+                'sudah' => HisMf::where('semester', '=', '211')->where('sts_mhs', '=', 'O')
+                    ->whereBetween(DB::raw("SUBSTR(mhs_nim, 0, 2)"), [$tahun_awal, $tahun_akhir])->count(),
+                'belum' => HisMf::where('semester', '=', '211')->whereNull('sts_mhs')
+                    ->whereBetween(DB::raw("SUBSTR(mhs_nim, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
             ];
         } else {
+            $total_pendaftar = PendaftaranOnline::count();
+
             $unggah_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])->count(),
                 'belum' => count(DB::select("SELECT * FROM PENDAFTARAN_ONLINE
-                WHERE PATH_FOTO IS NULL
-                AND PATH_RAPOR IS NULL
-                AND PATH_BAYAR IS NULL
-                AND NO_TEST IS NULL 
-                UNION (SELECT * FROM PENDAFTARAN_ONLINE
-                WHERE PATH_FOTO IS NOT NULL
-                AND PATH_RAPOR IS NULL
-                AND PATH_BAYAR IS NOT NULL
-                AND NO_TEST IS NULL)"))
+                    WHERE PATH_FOTO IS NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NULL
+                    AND NO_TEST IS NULL 
+                    UNION (SELECT * FROM PENDAFTARAN_ONLINE
+                    WHERE PATH_FOTO IS NOT NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NOT NULL
+                    AND NO_TEST IS NULL
+                    UNION (SELECT * FROM PENDAFTARAN_ONLINE
+                    WHERE PATH_FOTO IS NULL
+                    AND PATH_RAPOR IS NULL
+                    AND PATH_BAYAR IS NOT NULL
+                    AND NO_TEST IS NULL))"))
             ];
             $verifikasi_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull('no_test')->count(),
@@ -161,10 +180,9 @@ class VisualController extends Controller
                 'belum' => MhsTemp::whereNull('nim')->count()
             ];
             $mengundurkan_diri = [
-                'sudah' => HisMf::where('semester', '=', 2)->where('sts_mhs', '=', 'O')->count(),
-                'belum' => HisMf::where('semester', '=', 2)->whereNull('sts_mhs')->count()
+                'sudah' => HisMf::where('semester', '=', '211')->where('sts_mhs', '=', 'O')->count(),
+                'belum' => HisMf::where('semester', '=', '211')->whereNull('sts_mhs')->count()
             ];
-            return $mengundurkan_diri;
         }
 
         return view('pages.dashboard.visual.data_calon_mahasiswa', [
@@ -173,23 +191,34 @@ class VisualController extends Controller
             ],
             'data' => [
                 'unggah_berkas' => [
-                    'sudah' => round($unggah_berkas['sudah'] / $total_pendaftar * 100),
-                    'belum' => round($unggah_berkas['belum'] / $total_pendaftar * 100)
+                    'percent' => round($unggah_berkas['sudah'] / $total_pendaftar * 100),
+                    'sudah' => $unggah_berkas['sudah'],
+                    'belum' => $unggah_berkas['belum']
                 ],
                 'verifikasi_berkas' => [
-                    'sudah' => round($verifikasi_berkas['sudah'] / $unggah_berkas['sudah'] * 100)
+                    'percent' => round($verifikasi_berkas['sudah'] / $unggah_berkas['sudah'] * 100),
+                    'sudah' => $verifikasi_berkas['sudah'],
+                    'belum' => $verifikasi_berkas['belum']
                 ],
                 'membayar_registrasi' => [
-                    'sudah' => round($membayar_registrasi['sudah'] / $verifikasi_berkas['sudah'] * 100)
+                    'percent' => round($membayar_registrasi['sudah'] / $verifikasi_berkas['sudah'] * 100),
+                    'sudah' => $membayar_registrasi['sudah'],
+                    'belum' => $membayar_registrasi['belum']
                 ],
                 'registrasi_ulang' => [
-                    'sudah' => round($registrasi_ulang['sudah'] / $membayar_registrasi['sudah'] * 100)
+                    'percent' => round($registrasi_ulang['sudah'] / $membayar_registrasi['sudah'] * 100),
+                    'sudah' => $registrasi_ulang['sudah'],
+                    'belum' => $registrasi_ulang['belum']
                 ],
                 'memiliki_nim' => [
-                    'sudah' => round($memiliki_nim['sudah'] / $registrasi_ulang['sudah'] * 100)
+                    'percent' => round($memiliki_nim['sudah'] / $registrasi_ulang['sudah'] * 100),
+                    'sudah' => $memiliki_nim['sudah'],
+                    'belum' => $memiliki_nim['belum']
                 ],
                 'mengundurkan_diri' => [
-                    'sudah' => round($mengundurkan_diri['sudah'] / $registrasi_ulang['sudah'] * 100)
+                    'percent' => round($mengundurkan_diri['sudah'] / $memiliki_nim['sudah'] * 100),
+                    'sudah' => $mengundurkan_diri['sudah'],
+                    'belum' => $mengundurkan_diri['belum']
                 ]
             ]
         ]);
@@ -201,6 +230,8 @@ class VisualController extends Controller
             ->select(DB::raw("SUBSTR(no_test, 0, 2) as tahun"))
             ->orderBy('tahun', 'ASC')->distinct()->get();
 
+        $jalur_masuk = JalurMasukPMB::get();
+        $jalur_daftar = [];
         $prodi = ProdiMf::orderBy('nama_prodi')->get();
         $prodi_all = [];
         $prodi_laki_laki = [];
@@ -403,6 +434,17 @@ class VisualController extends Controller
                             GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
         } else {
+            // $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(mt.no_test) as count FROM jalur_masuk_pmb jmp 
+            // JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = jmp.id_jalur
+            // GROUP BY jmp.nama_jalur, SUBSTR(mt.no_test, 3, 2)");
+
+            foreach ($jalur_masuk as $jalur) {
+                $jalur_daftar[] = [
+                    'nama_jalur' => $jalur->nama_jalur,
+                    'count' => collect(DB::select("SELECT DISTINCT(mt.no_test) FROM jalur_masuk_pmb jmp 
+                            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = '$jalur->id_jalur'"))->count()
+                ];
+            }
 
             foreach ($prodi as $loopItem) {
                 $prodi_laki_laki[] = [
@@ -522,10 +564,6 @@ class VisualController extends Controller
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ]
             ];
-        
-            $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(mt.no_test) as count FROM jalur_masuk_pmb jmp 
-            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = jmp.id_jalur
-            GROUP BY jmp.nama_jalur, SUBSTR(mt.no_test, 3, 2)");
         }
 
         $program_studi = [

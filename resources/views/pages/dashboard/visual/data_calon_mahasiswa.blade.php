@@ -114,13 +114,15 @@
 
 @push('script')
 <script>
+  const chartsData = {!! json_encode($data) !!};
   const centerPoint = {
     id: 'center_point',
     afterDraw(chart, args, options){
       const { ctx, chartArea: { left, right, top, bottom, width, height } } = chart;
       ctx.save();
 
-      const point = chart.config.data.datasets[0].data[0];
+      // const point = chart.config.data.datasets[0].data[0];
+      const point = chartsData[chart.$context.chart.canvas.id.replace('chart_', '')]?.percent;
       ctx.font = 'bolder 3rem Arial';
       ctx.fillStyle = 'black';
       ctx.textAlign = 'center';
@@ -132,8 +134,7 @@
       // }
     }
   }
-
-  const chartsData = {!! json_encode($data) !!};
+  
   const charts = document.querySelectorAll('canvas');
   
   Array.from(charts).forEach(function(element){
