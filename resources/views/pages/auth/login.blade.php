@@ -1,5 +1,5 @@
 @extends('layout.auth')
-@section('title', 'Login')
+@section('title', 'Masuk')
 
 @section('content')
 <div class="left_side"></div>
@@ -25,7 +25,7 @@
         @error('password')<small class="text-danger">{{ $message }}</small>@enderror
       </div>
       <div class="d-grid">
-        <button type="submit" class="btn btn-secondary text-uppercase">Masuk</button>
+        <button type="submit" class="btn btn-danger text-uppercase"><b>Masuk</b></button>
       </div>
     </form>
   </div>

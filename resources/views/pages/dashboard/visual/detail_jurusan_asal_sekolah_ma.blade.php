@@ -5,7 +5,7 @@
 {{-- data visual detail --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Jurusan Asal Sekolah (MA)</h1>
+    <h1 class="h4 mb-5">JURUSAN ASAL SEKOLAH (MA)</h1>
     <div class="table-responsive">
       <table id="table_jurusan_asal_sekolah_ma" class="table table-striped" style="width:100%">
         <thead>

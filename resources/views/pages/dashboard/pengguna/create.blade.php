@@ -5,8 +5,8 @@
 {{-- pengguna --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Tambah Pengguna</h1>
-    <div class="card mt-5">
+    <h1 class="h4">TAMBAH PENGGUNA</h1>
+    <div class="card mt-4">
       <div class="card-body">
         <form action="{{ route('pengguna.create.action') }}" method="POST">
           @csrf
@@ -30,7 +30,7 @@
             <label for="email_pengguna" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="email_pengguna" name="email_pengguna"
-                placeholder="masukkan email">
+                placeholder="masukkan email Dinamika">
               @error('email')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
           </div>
@@ -59,8 +59,8 @@
             </div>
           </div>
           <div>
-            <button type="submit" class="btn btn-light">Tambah</button>
-            <a href="{{ route('pengguna.index') }}" class="btn btn-light">Batal</a>
+            <button type="submit" class="btn btn-success">Tambah</button>
+            <a href="{{ route('pengguna.index') }}" class="btn btn-danger mx-2">batal</a>
           </div>
         </form>
       </div>

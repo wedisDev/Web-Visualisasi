@@ -31,6 +31,14 @@
 /* auth */
 
 /* dashboard */
+.navbar a {
+  color: white!important;
+}
+
+.dropdown-menu a {
+  color: black!important;
+}
+
 .navbar-collapse{
   flex-grow: unset!important;
 }
@@ -46,6 +54,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .card_visual{

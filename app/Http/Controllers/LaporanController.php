@@ -44,9 +44,6 @@ class LaporanController extends Controller
                                         AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))[0]->count,
                     'perempuan'     =>  DB::select(DB::raw("SELECT COUNT(mt.nim) as count
                                         FROM mhs_temp mt WHERE (SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi' AND mt.sex = 2)
-                                        AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))[0]->count,
-                    'total'         =>  DB::select(DB::raw("SELECT COUNT(mt.nim) as count
-                                        FROM mhs_temp mt WHERE SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'
                                         AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))[0]->count
                 ];
             }
@@ -86,9 +83,7 @@ class LaporanController extends Controller
                     'laki_laki'     =>  DB::select(DB::raw("SELECT COUNT(mt.nim) as count
                                         FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'"))[0]->count,
                     'perempuan'     =>  DB::select(DB::raw("SELECT COUNT(mt.nim) as count
-                                        FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'"))[0]->count,
-                    'total'         =>  DB::select(DB::raw("SELECT COUNT(mt.nim) as count
-                                        FROM mhs_temp mt WHERE SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'"))[0]->count
+                                        FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'"))[0]->count
                 ];
             }
 

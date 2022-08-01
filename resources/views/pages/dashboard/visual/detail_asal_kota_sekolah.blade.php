@@ -5,7 +5,7 @@
 {{-- data visual detail --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Asal Kota Sekolah</h1>
+    <h1 class="h4 mb-5">ASAL KOTA SEKOLAH</h1>
     <div class="table-responsive">
       <table id="table_asal_kota_sekolah" class="table table-striped" style="width:100%">
         <thead>

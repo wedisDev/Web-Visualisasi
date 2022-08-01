@@ -31,7 +31,7 @@
 {{-- visualisasi --}}
 <section>
   <div class="container my-5">
-    <h1 class="h4 text-center mb-4">Visualisasi Informasi</h1>
+    <h1 class="h4 text-center mb-4">VISUALISASI INFORMASI</h1>
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="row">
@@ -40,7 +40,7 @@
               <div class="card bg-light">
                 <div class="card-body card_visual">
                   <div class="icon">
-                    <i class="fa-solid fa-graduation-cap"></i>
+                    <i class="fa-solid fa-pie-chart"></i>
                   </div>
                   <h1 class="h5">Data Calon Mahasiswa</h1>
                 </div>
@@ -52,7 +52,7 @@
               <div class="card bg-light">
                 <div class="card-body card_visual">
                   <div class="icon">
-                    <i class="fa-solid fa-diagram-project"></i>
+                    <i class="fa-solid fa-bar-chart"></i>
                   </div>
                   <h1 class="h5">Data Sebaran Calon Mahasiswa</h1>
                 </div>

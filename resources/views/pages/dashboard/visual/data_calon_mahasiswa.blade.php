@@ -5,7 +5,7 @@
 {{-- data visual --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Data Calon Mahasiswa</h1>
+    <h1 class="h4 mb-4">DATA CALON MAHASISWA</h1>
     <div class="row align-items-end">
       <div class="col-lg-3">
         <form action="{{ route('visual.data.calon.mahasiswa') }}" method="GET">
@@ -20,7 +20,7 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+          <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
       </div>
       <div class="col-lg-6">
@@ -53,11 +53,11 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+          <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">

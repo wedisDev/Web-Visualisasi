@@ -5,8 +5,8 @@
 {{-- pengguna --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Ubah Pengguna</h1>
-    <div class="card mt-5">
+    <h1 class="h4">UBAH PENGGUNA</h1>
+    <div class="card mt-4">
       <div class="card-body">
         <form action="{{ route('pengguna.update.action', $pengguna->id_pengguna) }}" method="POST">
           @csrf
@@ -63,8 +63,8 @@
             </div>
           </div>
           <div>
-            <button type="submit" class="btn btn-light">Simpan</button>
-            <a href="{{ route('pengguna.index') }}" class="btn btn-light">Batal</a>
+            <button type="submit" class="btn btn-success">Simpan</button>
+            <a href="{{ route('pengguna.index') }}" class="btn btn-danger mx-2">batal</a>
           </div>
         </form>
       </div>

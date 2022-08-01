@@ -5,8 +5,8 @@
 {{-- pengguna --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Pencatatan Pengguna</h1>
-    <a href="{{ route('pengguna.create.view') }}" class="btn btn-primary mt-5 mb-4">Tambah Pengguna</a>
+    <h1 class="h4">PENGGUNA</h1>
+    <a href="{{ route('pengguna.create.view') }}" class="btn btn-primary mt-4 mb-4">Tambah Pengguna</a>
     <div class="table-responsive">
       <table id="table_pengguna" class="table table-striped" style="width:100%">
         <thead>
@@ -68,7 +68,7 @@
     initComplete: function(settings, json) {
       $('.btn-danger').each(function(index){
           $(this).on('click', function(event){
-            const question = confirm('apakah anda yakin menghapus data ini?');
+            const question = confirm('Apakah Anda yakin menghapus data pengguna ini?');
             
             if(question){
               return;

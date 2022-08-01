@@ -45,7 +45,6 @@
         <th>total daftar</th>
         <th>laki-laki</th>
         <th>perempuan</th>
-        <th>total</th>
       </tr>
     </thead>
     <tbody>
@@ -55,7 +54,6 @@
         <td>{{ $loopItem['total_daftar'] }}</td>
         <td>{{ $loopItem['laki_laki'] }}</td>
         <td>{{ $loopItem['perempuan'] }}</td>
-        <td>{{ $loopItem['total'] }}</td>
       </tr>
       @endforeach
     </tbody>

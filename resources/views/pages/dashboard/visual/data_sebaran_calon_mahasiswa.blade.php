@@ -5,7 +5,7 @@
 {{-- data visual --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Data Sebaran Calon Mahasiswa</h1>
+    <h1 class="h4 mb-4">DATA SEBARAN CALON MAHASISWA</h1>
     <div class="row align-items-end">
       <div class="col-lg-3">
         <form action="{{ route('visual.data.sebaran.calon.mahasiswa') }}" method="GET">
@@ -20,7 +20,7 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+          <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
       </div>
       <div class="col-lg-6">
@@ -53,11 +53,11 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-light text-capitalize">filter</button>
+          <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
       </div>
     </div>
-    <div class="row mt-5">
+    <div class="row mt-4">
       <div class="col-lg-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
@@ -98,8 +98,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}" class="btn btn-light text-capitalize">see
-                more</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_sma"></canvas>
           </div>
@@ -110,8 +109,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}" class="btn btn-light text-capitalize">see
-                more</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_smk"></canvas>
           </div>
@@ -122,8 +120,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (MA)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.ma') }}" class="btn btn-light text-capitalize">see
-                more</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.ma') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_ma"></canvas>
           </div>
@@ -134,7 +131,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
-              <a href="{{ route('visual.data.asal.kota.sekolah') }}" class="btn btn-light text-capitalize">see more</a>
+              <a href="{{ route('visual.data.asal.kota.sekolah') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_asal_kota_sekolah"></canvas>
           </div>
@@ -179,7 +176,8 @@
             position: 'bottom',
           }
         }
-      }
+      },
+      plugins: [ChartDataLabels]
   });
 
   const dataProgramStudi = {!! json_encode($program_studi) !!};
@@ -291,6 +289,7 @@
     $('.prodi_all').append(`
       <div class="col-lg-3 mb-4">
         <div class="card h-100">
+        {{-- <div class="card h-100" style="border-color: red!important;"> --}}
           <div class="card-body">
             <h1 class="h6 text-center text-uppercase">${prodi.prodi}</h1>
             <canvas id="chart_prodi_${prodi.chart_id}" class="w-100"></canvas>

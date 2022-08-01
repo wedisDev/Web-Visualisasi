@@ -5,14 +5,14 @@
 {{-- data laporan --}}
 <section>
   <div class="container my-4">
-    <h1 class="h4">Laporan</h1>
+    <h1 class="h4 mb-4">LAPORAN</h1>
     <form action="{{ route('laporan.pdf') }}" method="GET">
       <div class="row align-items-end">
         <div class="col-lg-9">
           <div class="row">
             <div class="col-lg">
               <div class="mb-3">
-                <label for="search_data" class="form-label">Data</label>
+                <label for="search_data" class="form-label">Data Visualisasi</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
                   <select class="form-select" id="search_data" name="search_data">
@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-light text-capitalize">export pdf</button>
+          <button type="submit" class="btn btn-primary text-capitalize">Unduh Laporan</button>
         </div>
       </div>
     </form>
