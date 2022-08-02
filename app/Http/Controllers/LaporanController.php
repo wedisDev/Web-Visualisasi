@@ -26,11 +26,12 @@ class LaporanController extends Controller
 
     public function laporanGeneratePDF(Request $request)
     {
-        $prodi = ProdiMf::orderBy('nama_prodi')->get();
+        $prodi = ProdiMf::orderBy('fakultas', 'DESC')->get();
         $tahun_awal = substr($request->get('tahun_awal'), -2);
         $tahun_akhir = substr($request->get('tahun_akhir'), -2);
         $data_calon_mahasiswa = [];
         $data_sebaran_calon_mahasiswa = [];
+        $data_prodi = [];
 
         if ($request->has('tahun_awal') && $request->has('tahun_akhir')) {
             foreach ($prodi as $loopItem) {
@@ -106,21 +107,32 @@ class LaporanController extends Controller
                     'registrasi_ulang' => DB::select("SELECT COUNT(*) AS count FROM pendaftaran_online po 
                                         WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = po.no_test AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi')")[0]->count,
                     'memiliki_nim' => DB::select("SELECT COUNT(*) AS count FROM mhs_temp mt 
-                                        WHERE SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi' AND mt.nim IS NOT NULL")[0]->count,
+                                        WHERE SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi' AND mt.nim IS NOT NULL")[0]->count
                 ];
             }
         }
 
+        // data prodi semua
+        foreach($prodi as $loopItem) {
+            $data_prodi[] = [
+                'id_prodi' => $loopItem->id_prodi,
+                'nama_prodi' => $loopItem->nama_prodi,
+                'fakultas' => $loopItem->fakultas,
+            ];
+        };
+
         if ($request->get('search_data') == 'data_calon_mahasiswa') {
             $pdf = Pdf::loadView('laporan.pdf_data_calon_mahasiswa', [
                 'title' => 'data_calon_mahasiswa_' . date_format(Carbon::now(), 'dmy'),
-                'data_calon_mahasiswa' => $data_calon_mahasiswa
-            ])->setPaper('a4', 'landscape');
+                'data_calon_mahasiswa' => $data_calon_mahasiswa,
+                'data_prodi' => $data_prodi
+            ])->setPaper('a4', 'portrait');
         } else if ($request->get('search_data') == 'data_sebaran_calon_mahasiswa') {
             $pdf = Pdf::loadView('laporan.pdf_data_sebaran_calon_mahasiswa', [
                 'title' => 'data_sebaran_calon_mahasiswa_' . date_format(Carbon::now(), 'dmy'),
-                'data_sebaran_calon_mahasiswa' => $data_sebaran_calon_mahasiswa
-            ])->setPaper('a4', 'landscape');
+                'data_sebaran_calon_mahasiswa' => $data_sebaran_calon_mahasiswa,
+                'data_prodi' => $data_prodi
+            ])->setPaper('a4', 'portrait');
         }
 
         return $pdf->stream();

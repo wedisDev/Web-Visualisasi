@@ -37,9 +37,10 @@
 </head>
 
 <body>
+  <div><img src='assets/images/kopz.png' style='width:100%'></div>
   <h1>data calon mahasiswa</h1>
   <table>
-    <thead>
+    <thead style='font-size: 0.75em'>
       <th>prodi</th>
       <th>total</th>
       <th>unggah berkas</th>
@@ -49,20 +50,55 @@
       <th>memiliki nim</th>
     </thead>
     <tbody>
+      @php
+        $fakultas = '';
+      @endphp
+
       @foreach ($data_calon_mahasiswa as $loopItem)
+
+      @foreach ($data_prodi as $prodi)
+        @if($prodi['nama_prodi'] == $loopItem['prodi'])
+          @if($fakultas != $prodi['fakultas'])
+            @php
+              $fakultas = $prodi['fakultas']
+            @endphp
+            <tr>
+              <td colspan='7'><b>{{ $fakultas }}</b></td>
+            </tr>
+          @endif
+        @endif
+      @endforeach
+
       <tr>
         <td>{{ $loopItem['prodi'] }}</td>
-        <td>{{ $loopItem['total_daftar'] }}</td>
-        <td>{{ $loopItem['unggah_berkas'] }}</td>
-        <td>{{ $loopItem['verifikasi_berkas'] }}</td>
-        <td>{{ $loopItem['membayar_regist'] }}</td>
-        <td>{{ $loopItem['registrasi_ulang'] }}</td>
-        <td>{{ $loopItem['memiliki_nim'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['total_daftar'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['unggah_berkas'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['verifikasi_berkas'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['membayar_regist'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['registrasi_ulang'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['memiliki_nim'] }}</td>
       </tr>
       @endforeach
     </tbody>
   </table>
   <h2>tanggal: {{ now() }}</h2>
+
+  <div style='width: 25%; margin-left: 30.95em;'>
+      <table style='text-align: center; border: hidden'>
+        <tr style='border: hidden'>
+            <td style='border: hidden'>Kepala Bagian Penmaru</td>
+        </tr>
+        <tr style='border: hidden'>
+            <td style='border: hidden'>
+              <div style='margin-top: 4em'></div>
+            </td>
+        </tr>
+        <tr style='border: hidden'>
+            <td style='border: hidden'>_______________________</td>
+        </tr>
+      </table>
+  <div>
+
 </body>
 
 </html>

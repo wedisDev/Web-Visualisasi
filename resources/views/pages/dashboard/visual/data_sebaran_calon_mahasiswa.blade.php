@@ -61,7 +61,7 @@
       <div class="col-lg-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">jalur daftar</h1>
+            <h1 class="h5 text-center text-uppercase">jalur pendaftaran</h1>
             <canvas id="chart_jalur_daftar"></canvas>
           </div>
         </div>
@@ -69,13 +69,13 @@
       <div class="col-lg-8 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">program studi</h1>
+            <h1 class="h5 text-center text-uppercase">program studi dan gender (bar chart)</h1>
             <canvas id="chart_program_studi"></canvas>
           </div>
         </div>
       </div>
       <div class="prodi_all row">
-        <h1 class="h5 mb-4 text-center text-uppercase">program studi</h1>
+        <h1 class="h5 mb-4 text-center text-uppercase">program studi dan gender (pie chart)</h1>
       </div>
       <div class="col-lg mb-4">
         <div class="card">

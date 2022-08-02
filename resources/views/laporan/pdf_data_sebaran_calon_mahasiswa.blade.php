@@ -37,6 +37,7 @@
 </head>
 
 <body>
+  <div><img src='assets/images/kopz.png' style='width:100%'></div>
   <h1>data sebaran calon mahasiswa</h1>
   <table>
     <thead>
@@ -48,17 +49,51 @@
       </tr>
     </thead>
     <tbody>
+      @php
+        $fakultas = '';
+      @endphp
+
       @foreach ($data_sebaran_calon_mahasiswa as $loopItem)
+
+      @foreach ($data_prodi as $prodi)
+        @if($prodi['nama_prodi'] == $loopItem['prodi'])
+          @if($fakultas != $prodi['fakultas'])
+            @php
+            $fakultas = $prodi['fakultas']
+            @endphp
+            <tr style='font-weight: 600'>
+              <td colspan='4'><b>{{ $fakultas }}</b></td>
+            </tr>
+          @endif
+        @endif
+      @endforeach
+
       <tr>
         <td>{{ $loopItem['prodi'] }}</td>
-        <td>{{ $loopItem['total_daftar'] }}</td>
-        <td>{{ $loopItem['laki_laki'] }}</td>
-        <td>{{ $loopItem['perempuan'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['total_daftar'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['laki_laki'] }}</td>
+        <td style='text-align: center'>{{ $loopItem['perempuan'] }}</td>
       </tr>
       @endforeach
     </tbody>
   </table>
   <h2>tanggal: {{ now() }}</h2>
+
+  <div style='width: 25%; margin-left: 30.95em;'>
+    <table style='text-align: center; border: hidden'>
+      <tr style='border: hidden'>
+          <td style='border: hidden'>Kepala Bagian Penmaru</td>
+      </tr>
+      <tr style='border: hidden'>
+          <td style='border: hidden'>
+            <div style='margin-top: 4em'></div>
+          </td>
+      </tr>
+      <tr style='border: hidden'>
+          <td style='border: hidden'>_______________________</td>
+      </tr>
+    </table>
+
 </body>
 
 </html>
