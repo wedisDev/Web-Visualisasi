@@ -24,7 +24,9 @@ class VisualController extends Controller
         $tahun_akhir = substr($request->get('tahun_akhir'), -2);
 
         if ($request->has('search_tahun')) {
-            $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_online, 3, 2)"), '=', $search_tahun)->count();
+            // $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)
+            //     ->orWhere(DB::raw("SUBSTR(no_online, 3, 2)"), '=', $search_tahun)->count();
+            $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count();
 
             $unggah_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
@@ -54,20 +56,22 @@ class VisualController extends Controller
                 'belum' => PendaftaranOnline::whereNull('no_test')->where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count()
             ];
             $membayar_registrasi = [
-                'sudah' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
-                            FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
+                'sudah' => count(DB::select("SELECT ss.no_online
+                            FROM save_sesi ss
                             WHERE ss.sts_upl_buktiregis IS NOT NULL AND ss.path_buktiregis IS NOT NULL
-                            AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'")),
-                'belum' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
-                            FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
+                            AND SUBSTR(ss.no_test, 0, 2) = '$search_tahun'")),
+                'belum' => count(DB::select("SELECT ss.no_online
+                            FROM save_sesi ss
                             WHERE ss.sts_upl_buktiregis IS NULL AND ss.path_buktiregis IS NULL
-                            AND SUBSTR(po.no_test, 0, 2) = '$search_tahun'"))
+                            AND SUBSTR(ss.no_test, 0, 2) = '$search_tahun'"))
             ];
             $registrasi_ulang = [
                 'sudah' => count(DB::select("SELECT * FROM save_sesi ss 
-                    WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')")),
+                    WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)
+                    AND SUBSTR(ss.no_test, 0, 2) = '$search_tahun'")),
                 'belum' => count(DB::select("SELECT * FROM save_sesi ss 
-                    WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) = '$search_tahun')"))
+                    WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)
+                    AND SUBSTR(ss.no_test, 0, 2) = '$search_tahun'"))
             ];
             $memiliki_nim = [
                 'sudah' => MhsTemp::whereNotNull('nim')
@@ -82,7 +86,10 @@ class VisualController extends Controller
                     ->where(DB::raw("SUBSTR(mhs_nim, 0, 2)"), '=', $search_tahun)->count(),
             ];
         } elseif ($request->has('tahun_awal') && $request->has('tahun_akhir')) {
-            $total_pendaftar = PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_online, 3, 2)"), [$tahun_awal, $tahun_akhir])->count();
+            // $total_pendaftar = PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])
+            //     ->orWhereBetween(DB::raw("SUBSTR(no_online, 3, 2)"), [$tahun_awal, $tahun_akhir])->count();
+            $total_pendaftar = PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])
+                ->count();
 
             $unggah_berkas = [
                 'sudah' => PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
@@ -113,20 +120,22 @@ class VisualController extends Controller
                     ->whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])->count()
             ];
             $membayar_registrasi = [
-                'sudah' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
-                            FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
+                'sudah' => count(DB::select("SELECT ss.no_test
+                            FROM save_sesi ss
                             WHERE ss.sts_upl_buktiregis IS NOT NULL AND ss.path_buktiregis IS NOT NULL
-                            AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'")),
-                'belum' => count(DB::select("SELECT ss.path_buktiregis, ss.sts_upl_buktiregis
-                            FROM pendaftaran_online po JOIN save_sesi ss ON ss.no_test = po.no_test
+                            AND SUBSTR(ss.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'")),
+                'belum' => count(DB::select("SELECT ss.no_test
+                            FROM save_sesi ss
                             WHERE ss.sts_upl_buktiregis IS NULL AND ss.path_buktiregis IS NULL
-                            AND SUBSTR(po.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))
+                            AND SUBSTR(ss.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))
             ];
             $registrasi_ulang = [
                 'sudah' => count(DB::select("SELECT * FROM save_sesi ss 
-                WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')")),
+                        WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)
+                        AND SUBSTR(ss.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'")),
                 'belum' => count(DB::select("SELECT * FROM save_sesi ss 
-                WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test AND SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir')"))
+                        WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)
+                        AND SUBSTR(ss.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'"))
             ];
             $memiliki_nim = [
                 'sudah' => MhsTemp::whereNotNull('nim')

@@ -16,6 +16,7 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
                   <select class="form-select" id="search_data" name="search_data">
+                    <option disabled selected>Pilih</option>
                     <option value="data_calon_mahasiswa">Data Calon Mahasiswa</option>
                     <option value="data_sebaran_calon_mahasiswa">Data Sebaran Calon Mahasiswa</option>
                   </select>
@@ -28,6 +29,7 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                   <select class="form-select" id="tahun_awal" name="tahun_awal">
+                    <option disabled selected>Pilih</option>
                     @foreach ($tahun['semua'] as $loopItem)
                     <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
                     @endforeach
@@ -41,6 +43,7 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                   <select class="form-select" id="tahun_akhir" name="tahun_akhir">
+                    <option disabled selected>Pilih</option>
                     @foreach ($tahun['semua'] as $loopItem)
                     <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
                     @endforeach

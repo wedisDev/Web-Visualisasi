@@ -14,6 +14,7 @@
             <div class="input-group">
               <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
               <select class="form-select" id="search_tahun" name="search_tahun">
+                <option disabled selected>Pilih</option>
                 @foreach ($tahun['semua'] as $loopItem)
                 <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
                 @endforeach
@@ -32,6 +33,7 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                   <select class="form-select" id="tahun_awal" name="tahun_awal">
+                    <option disabled selected>Pilih</option>
                     @foreach ($tahun['semua'] as $loopItem)
                     <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
                     @endforeach
@@ -45,6 +47,7 @@
                 <div class="input-group">
                   <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
                   <select class="form-select" id="tahun_akhir" name="tahun_akhir">
+                    <option disabled selected>Pilih</option>
                     @foreach ($tahun['semua'] as $loopItem)
                     <option value="{{ '20' . $loopItem['tahun'] }}">{{ '20' . $loopItem['tahun'] }}</option>
                     @endforeach
@@ -98,7 +101,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMA)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.sma') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_sma"></canvas>
           </div>
@@ -109,7 +113,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (SMK)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.smk') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_smk"></canvas>
           </div>
@@ -120,7 +125,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">jurusan asal sekolah (MA)</h1>
-              <a href="{{ route('visual.data.jurusan.asal.sekolah.ma') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
+              <a href="{{ route('visual.data.jurusan.asal.sekolah.ma') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_jurusan_asal_sekolah_ma"></canvas>
           </div>
@@ -131,7 +137,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <h1 class="h5 text-center text-uppercase">asal kota sekolah</h1>
-              <a href="{{ route('visual.data.asal.kota.sekolah') }}" class="btn btn-success text-capitalize">Selengkapnya</a>
+              <a href="{{ route('visual.data.asal.kota.sekolah') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
             </div>
             <canvas id="chart_asal_kota_sekolah"></canvas>
           </div>
