@@ -7,6 +7,22 @@
   <div class="container my-4">
     <h1 class="h4 mb-4">DATA CALON MAHASISWA</h1>
     <div class="row align-items-end">
+      <div class="col-lg-12 mb-4">
+        <div class="row">
+          <div class="col-lg-3">
+            <form action="" method="GET">
+              <div class="mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <input type="date" class="form-control" name="tanggal" id="tanggal">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary text-capitalize">filter</button>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="col-lg-3">
         <form action="{{ route('visual.data.calon.mahasiswa') }}" method="GET">
           <div class="mb-3">
@@ -23,6 +39,9 @@
           </div>
           <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
+      </div>
+      <div class="col-lg-1 align-self-center">
+        <h1 class="h5">atau</h1>
       </div>
       <div class="col-lg-6">
         <form action="{{ route('visual.data.calon.mahasiswa') }}" method="GET">
@@ -60,52 +79,98 @@
         </form>
       </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <h1 class="h5">Total Daftar: 286 Mahasiswa</h1>
+      <h1 class="h5">Informasi Calon Mahasiswa: 20 Oktober 2022</h1>
+    </div>
     <div class="row mt-4">
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">unggah berkas</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>1.</h5>
+              <h1 class="h5 text-center text-uppercase">unggah berkas</h1>
+            </div>
             <canvas id="chart_unggah_berkas"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">total pendaftar: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah unggah berkas: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">verifikasi berkas</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>2.</h5>
+              <h1 class="h5 text-center text-uppercase">verifikasi berkas</h1>
+            </div>
             <canvas id="chart_verifikasi_berkas"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">sudah unggah berkas: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah verifikasi berkas: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">membayar registrasi</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>3.</h5>
+              <h1 class="h5 text-center text-uppercase">membayar registrasi</h1>
+            </div>
             <canvas id="chart_membayar_registrasi"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">sudah verifikasi berkas: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah membayar registrasi: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">registrasi ulang</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>4.</h5>
+              <h1 class="h5 text-center text-uppercase">registrasi ulang</h1>
+            </div>
             <canvas id="chart_registrasi_ulang"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">sudah membayar registrasi: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah registrasi ulang: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">memiliki nim</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>5.</h5>
+              <h1 class="h5 text-center text-uppercase">memiliki nim</h1>
+            </div>
             <canvas id="chart_memiliki_nim"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">sudah registrasi ulang: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah memiliki nim: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-lg-4 mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">mengundurkan diri</h1>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <h5>6.</h5>
+              <h1 class="h5 text-center text-uppercase">mengundurkan diri</h1>
+            </div>
             <canvas id="chart_mengundurkan_diri"></canvas>
+            <div class="d-flex flex-column align-items-center mt-2">
+              <small class="text-muted text-capitalize">sudah memiliki nim: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">sudah mengundurkan diri: 255 mahasiswa</small>
+            </div>
           </div>
         </div>
       </div>

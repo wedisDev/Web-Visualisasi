@@ -59,7 +59,9 @@
           <div class="mb-3 row">
             <label for="password" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" id="password" name="password" placeholder="masukkan password">
+              {{-- ini buat nampilin passwordnya mas daffa 😁 --}}
+              <input type="text" class="form-control" id="password" name="password" value="{{ $pengguna->password }}"
+                placeholder="masukkan password">
             </div>
           </div>
           <div>

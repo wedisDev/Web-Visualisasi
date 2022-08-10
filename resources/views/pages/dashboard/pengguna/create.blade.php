@@ -38,7 +38,8 @@
             <label for="jabatan_pengguna" class="col-sm-2 col-form-label">Jabatan</label>
             <div class="col-sm-10">
               <select class="form-select" id="jabatan_pengguna" name="jabatan_pengguna">
-                <option value="warek" selected>Warek</option>
+                <option disabled selected>--Pilih</option>
+                <option value="warek">Warek</option>
                 <option value="kabag">Kabag</option>
                 <option value="staf">Staf</option>
               </select>

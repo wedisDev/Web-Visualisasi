@@ -62,14 +62,24 @@ class PenggunaController extends Controller
             'username' => 'required'
         ]);
 
-        $pengguna->update([
-            'id_pengguna' => $request->id_pengguna,
-            'nama_pengguna' => $request->nama_pengguna,
-            'email_pengguna' => $request->email_pengguna,
-            'jabatan_pengguna' => $request->jabatan_pengguna,
-            'username' => $request->username,
-            'password' => bcrypt($request->password)
-        ]);
+        if (!empty($request->password)) {
+            $pengguna->update([
+                'id_pengguna' => $request->id_pengguna,
+                'nama_pengguna' => $request->nama_pengguna,
+                'email_pengguna' => $request->email_pengguna,
+                'jabatan_pengguna' => $request->jabatan_pengguna,
+                'username' => $request->username,
+                'password' => bcrypt($request->password)
+            ]);
+        } else {
+            $pengguna->update([
+                'id_pengguna' => $request->id_pengguna,
+                'nama_pengguna' => $request->nama_pengguna,
+                'email_pengguna' => $request->email_pengguna,
+                'jabatan_pengguna' => $request->jabatan_pengguna,
+                'username' => $request->username
+            ]);
+        }
 
         return redirect()->route('pengguna.index');
     }
