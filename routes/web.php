@@ -50,6 +50,10 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/data-sebaran-calon-mahasiswa', 'dataSebaranCalonMahasiswa')->name('data.sebaran.calon.mahasiswa');
 
         Route::prefix('detail')->group(function () {
+            // route detail data calon
+            Route::get('/data-calon/{status}/{chart}', 'dataCalonMahasiswaDetailChart')->name('data.calon.mahasiswa.detail.chart');
+
+            // route detail data sebaran
             Route::get('/asal-kota-sekolah', 'asalKotaSekolah')->name('data.asal.kota.sekolah');
             Route::get('/jurusan-asal-sekolah-sma', 'jurusanAsalSekolahSma')->name('data.jurusan.asal.sekolah.sma');
             Route::get('/jurusan-asal-sekolah-ma', 'jurusanAsalSekolahMa')->name('data.jurusan.asal.sekolah.ma');

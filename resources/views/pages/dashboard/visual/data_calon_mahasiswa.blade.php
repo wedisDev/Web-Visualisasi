@@ -93,8 +93,10 @@
             </div>
             <canvas id="chart_unggah_berkas"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">total pendaftar: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah unggah berkas: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">total pendaftar: {{ $total_pendaftar }} mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah unggah berkas: {{ $data['unggah_berkas']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -108,8 +110,12 @@
             </div>
             <canvas id="chart_verifikasi_berkas"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">sudah unggah berkas: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah verifikasi berkas: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah unggah berkas: {{ $data['unggah_berkas']['sudah'] }} mahasiswa
+              </small>
+              <small class="text-muted text-capitalize">
+                sudah verifikasi berkas: {{ $data['verifikasi_berkas']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -123,8 +129,12 @@
             </div>
             <canvas id="chart_membayar_registrasi"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">sudah verifikasi berkas: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah membayar registrasi: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah verifikasi berkas: {{ $data['verifikasi_berkas']['sudah'] }} mahasiswa
+              </small>
+              <small class="text-muted text-capitalize">
+                sudah membayar registrasi: {{ $data['membayar_registrasi']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -138,8 +148,12 @@
             </div>
             <canvas id="chart_registrasi_ulang"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">sudah membayar registrasi: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah registrasi ulang: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah membayar registrasi: {{ $data['membayar_registrasi']['sudah'] }} mahasiswa
+              </small>
+              <small class="text-muted text-capitalize">
+                sudah registrasi ulang: {{ $data['registrasi_ulang']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -153,8 +167,12 @@
             </div>
             <canvas id="chart_memiliki_nim"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">sudah registrasi ulang: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah memiliki nim: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah registrasi ulang: {{ $data['membayar_registrasi']['sudah'] }} mahasiswa
+              </small>
+              <small class="text-muted text-capitalize">
+                sudah memiliki nim: {{ $data['memiliki_nim']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -168,8 +186,12 @@
             </div>
             <canvas id="chart_mengundurkan_diri"></canvas>
             <div class="d-flex flex-column align-items-center mt-2">
-              <small class="text-muted text-capitalize">sudah memiliki nim: 255 mahasiswa</small>
-              <small class="text-muted text-capitalize">sudah mengundurkan diri: 255 mahasiswa</small>
+              <small class="text-muted text-capitalize">
+                sudah memiliki nim: {{ $data['memiliki_nim']['sudah'] }} mahasiswa
+              </small>
+              <small class="text-muted text-capitalize">
+                sudah mengundurkan diri: {{ $data['mengundurkan_diri']['sudah'] }} mahasiswa
+              </small>
             </div>
           </div>
         </div>
@@ -232,6 +254,15 @@
             legend: {
               position: 'bottom'
             }
+          },
+          onClick: function(event, item) {
+            const status = ['sudah', 'belum'];
+            const indexChart = item[0].element.$context.dataIndex;
+            const chartName = element.id.replace('chart_', '').replace('_', ' ');
+
+            const REQUEST_URL = "{{ route('visual.data.calon.mahasiswa.detail.chart', [':status', ':chart']) }}".replace(':status', status[indexChart]).replace(':chart', chartName);
+
+            window.open(REQUEST_URL, '_newtab');
           }
         },
         plugins: [centerPoint]

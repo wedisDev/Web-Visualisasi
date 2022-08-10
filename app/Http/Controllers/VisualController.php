@@ -198,6 +198,7 @@ class VisualController extends Controller
             'tahun' => [
                 'semua' => $seluruh_tahun
             ],
+            'total_pendaftar' => $total_pendaftar,
             'data' => [
                 'unggah_berkas' => [
                     'percent' => round($unggah_berkas['sudah'] / $total_pendaftar * 100),
@@ -592,6 +593,11 @@ class VisualController extends Controller
                 'semua' => $seluruh_tahun
             ],
         ]);
+    }
+
+    public function dataCalonMahasiswaDetailChart($status, $chart)
+    {
+        return $chart;
     }
 
     public function asalKotaSekolah()
