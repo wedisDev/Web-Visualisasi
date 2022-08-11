@@ -10,14 +10,14 @@
       <div class="card-body">
         <form action="{{ route('pengguna.create.action') }}" method="POST">
           @csrf
-          <div class="mb-3 row">
+          {{-- <div class="mb-3 row">
             <label for="id_pengguna" class="col-sm-2 col-form-label">ID Pengguna</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="id_pengguna" name="id_pengguna"
                 placeholder="WR_001 = Warek, KB_001 = Kabag, ST_001 = Staf">
               @error('id_pengguna')<small class="text-danger">{{ $message }}</small>@enderror
             </div>
-          </div>
+          </div> --}}
           <div class="mb-3 row">
             <label for="nama_pengguna" class="col-sm-2 col-form-label">Nama Pengguna</label>
             <div class="col-sm-10">

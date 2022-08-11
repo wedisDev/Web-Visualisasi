@@ -80,8 +80,8 @@
       </div>
     </div>
     <div class="d-flex justify-content-between align-items-center mt-4">
-      <h1 class="h5">Total Daftar: 286 Mahasiswa</h1>
-      <h1 class="h5">Informasi Calon Mahasiswa: 20 Oktober 2022</h1>
+      <h1 class="h5">Total Daftar: {{ $total_pendaftar }} Mahasiswa</h1>
+      <h1 class="h5">Informasi Calon Mahasiswa: {{ now()->format('d F Y') }}</h1>
     </div>
     <div class="row mt-4">
       <div class="col-lg-4 mb-4">

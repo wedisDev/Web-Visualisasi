@@ -20,8 +20,11 @@ class PenggunaController extends Controller
 
     public function createAction(Request $request)
     {
+        $last_pengguna = Pengguna::where('jabatan_pengguna', '=', $request->jabatan_pengguna)->orderBy('id_pengguna', 'DESC')->first();
+        $id_pengguna = substr($last_pengguna->id_pengguna, 0, 2) . '_' . str_pad(substr($last_pengguna->id_pengguna, -3) + 1, 3, "0", STR_PAD_LEFT);
+
         $this->validate($request, [
-            'id_pengguna' => 'required|unique:pengguna,id_pengguna',
+            // 'id_pengguna' => 'required|unique:pengguna,id_pengguna',
             'nama_pengguna' => 'required',
             'email_pengguna' => 'required',
             'jabatan_pengguna' => 'required',
@@ -30,7 +33,7 @@ class PenggunaController extends Controller
         ]);
 
         Pengguna::create([
-            'id_pengguna' => $request->id_pengguna,
+            'id_pengguna' => $id_pengguna,
             'nama_pengguna' => $request->nama_pengguna,
             'email_pengguna' => $request->email_pengguna,
             'jabatan_pengguna' => $request->jabatan_pengguna,
