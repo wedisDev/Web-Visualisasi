@@ -313,11 +313,15 @@ class VisualController extends Controller
         $tahun_awal = substr($request->get('tahun_awal'), -2);
         $tahun_akhir = substr($request->get('tahun_akhir'), -2);
 
+        $current_date = substr(now()->format('Y'), -2);
+
         if ($request->has('search_tahun')) {
-            $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(ss.no_test) as count FROM jalur_masuk_pmb jmp 
-            JOIN save_sesi ss ON SUBSTR(ss.no_test, 3, 2) = jmp.id_jalur
-            WHERE SUBSTR(ss.no_test, 0, 2) = '$search_tahun'
-            GROUP BY jmp.nama_jalur, SUBSTR(ss.no_test, 3, 2)");
+            $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $search_tahun)->count();
+
+            $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(mt.no_test) as count FROM jalur_masuk_pmb jmp 
+            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = jmp.id_jalur
+            WHERE SUBSTR(mt.no_test, 0, 2) = '$search_tahun'
+            GROUP BY jmp.nama_jalur, SUBSTR(mt.no_test, 3, 2)");
 
             foreach ($prodi as $loopItem) {
                 $prodi_laki_laki[] = [
@@ -410,10 +414,13 @@ class VisualController extends Controller
                                     GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
         } elseif ($request->has('tahun_awal') && $request->has('tahun_akhir')) {
-            $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(ss.no_test) as count FROM jalur_masuk_pmb jmp 
-            JOIN save_sesi ss ON SUBSTR(ss.no_test, 3, 2) = jmp.id_jalur
-            WHERE SUBSTR(ss.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
-            GROUP BY jmp.nama_jalur, SUBSTR(ss.no_test, 3, 2)");
+            $total_pendaftar = PendaftaranOnline::whereBetween(DB::raw("SUBSTR(no_test, 0, 2)"), [$tahun_awal, $tahun_akhir])
+                ->count();
+
+            $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(mt.no_test) as count FROM jalur_masuk_pmb jmp 
+            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = jmp.id_jalur
+            WHERE SUBSTR(mt.no_test, 0, 2) BETWEEN '$tahun_awal' AND '$tahun_akhir'
+            GROUP BY jmp.nama_jalur, SUBSTR(mt.no_test, 3, 2)");
 
             foreach ($prodi as $loopItem) {
                 $prodi_laki_laki[] = [
@@ -509,6 +516,8 @@ class VisualController extends Controller
             // $jalur_daftar = DB::select("SELECT jmp.nama_jalur, COUNT(mt.no_test) as count FROM jalur_masuk_pmb jmp 
             // JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = jmp.id_jalur
             // GROUP BY jmp.nama_jalur, SUBSTR(mt.no_test, 3, 2)");
+
+            $total_pendaftar = PendaftaranOnline::where(DB::raw("SUBSTR(no_test, 0, 2)"), '=', $current_date)->count();
 
             foreach ($jalur_masuk as $jalur) {
                 $jalur_daftar[] = [
@@ -645,6 +654,7 @@ class VisualController extends Controller
         ];
 
         return view('pages.dashboard.visual.data_sebaran_calon_mahasiswa', [
+            'total_pendaftar' => $total_pendaftar,
             'jalur_daftar' => $jalur_daftar,
             'program_studi' => $program_studi,
             'prodi_all' => $prodi_all,
@@ -657,12 +667,64 @@ class VisualController extends Controller
         ]);
     }
 
+    public function jalurPendaftaran($jalurDaftar)
+    {
+        $jalurDaftar = JalurMasukPMB::where('nama_jalur', '=', $jalurDaftar)->first();
+        $chartData = DB::select("SELECT pm.nama_prodi, COUNT(DISTINCT(mt.no_test)) AS jumlah FROM jalur_masuk_pmb jmp 
+                    JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = '$jalurDaftar->id_jalur'
+                    JOIN prodi_mf pm ON pm.id_prodi = SUBSTR(mt.nim, 3, 5)
+                    GROUP BY pm.nama_prodi");
+
+        return view('pages.dashboard.visual.detail_jalur_daftar', [
+            'jalurDaftar' => $jalurDaftar,
+            'chartData' => $chartData
+        ]);
+    }
+
+    public function tipeDanStatusSekolah($tipe)
+    {
+        if ($tipe == 'sma_smk') {
+            $chartData = DB::select("SELECT sm.nama AS nama_sekolah, km.nama AS nama_kota, COUNT(sm.nama) AS jumlah
+                        FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
+                        JOIN smu_mf sm ON sm.id = op.asal_sma
+                        JOIN kota_mf km ON km.id = sm.kot_id
+                        WHERE sm.nama LIKE '%SMA%' OR sm.nama LIKE '%SMK%'
+                        GROUP BY sm.nama, km.nama");
+        } else if ($tipe == 'ma_dll') {
+            $chartData = DB::select("SELECT sm.nama AS nama_sekolah, km.nama AS nama_kota, COUNT(sm.nama) AS jumlah
+                        FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
+                        JOIN smu_mf sm ON sm.id = op.asal_sma
+                        JOIN kota_mf km ON km.id = sm.kot_id
+                        WHERE sm.nama LIKE 'MADRASAH%'
+                        OR sm.nama LIKE 'MA%'
+                        OR sm.nama LIKE 'MADARASYAH%' OR
+                        sm.nama NOT LIKE 'SMA%'
+                        AND sm.nama NOT LIKE 'SMU%'
+                        AND sm.nama NOT LIKE 'SMEA%'
+                        AND sm.nama NOT LIKE 'SMK%'
+                        AND sm.nama NOT LIKE 'STM%'
+                        AND sm.nama NOT LIKE 'MADRASAH%'
+                        AND sm.nama NOT LIKE 'MA%'
+                        AND sm.nama NOT LIKE '%BELUM%'
+                        GROUP BY sm.nama, km.nama");
+        }
+
+        return view('pages.dashboard.visual.detail_tipe_dan_status_sekolah', [
+            'title' => $tipe == 'sma_smk' ? 'SMA & SMK' : 'MA & LAIN - LAIN',
+            'chartData' => $chartData
+        ]);
+    }
+
     public function dataCalonMahasiswaDetailChart($status, $chart)
     {
         if ($status == 'sudah') {
             switch ($chart) {
                 case 'unggah berkas':
                     $chartData = PendaftaranOnline::whereNotNull(['path_foto', 'path_rapor', 'path_bayar'])
+                        ->get(['nama_mhs', 'hp_mhs', 'email', 'path_foto', 'path_rapor', 'path_bayar']);
+                    break;
+                case 'verifikasi berkas':
+                    $chartData = PendaftaranOnline::whereNotNull('no_test')
                         ->get(['nama_mhs', 'hp_mhs', 'email', 'path_foto', 'path_rapor', 'path_bayar']);
                     break;
             }
@@ -684,6 +746,10 @@ class VisualController extends Controller
                         AND PATH_RAPOR IS NULL
                         AND PATH_BAYAR IS NOT NULL
                         AND NO_TEST IS NULL))");
+                    break;
+                case 'verifikasi berkas':
+                    $chartData = PendaftaranOnline::whereNull('no_test')
+                        ->get(['nama_mhs', 'hp_mhs', 'email', 'path_foto', 'path_rapor', 'path_bayar']);
                     break;
             }
         }

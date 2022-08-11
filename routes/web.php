@@ -54,7 +54,9 @@ Route::prefix('dashboard')->group(function () {
             Route::get('/data-calon/{status}/{chart}', 'dataCalonMahasiswaDetailChart')->name('data.calon.mahasiswa.detail.chart');
 
             // route detail data sebaran
+            Route::get('/jalur-pendaftaran/{jalurDaftar}', 'jalurPendaftaran')->name('data.jalur.pendaftaran');
             Route::get('/asal-kota-sekolah', 'asalKotaSekolah')->name('data.asal.kota.sekolah');
+            Route::get('/tipe-dan-status-sekolah/{tipe}', 'tipeDanStatusSekolah')->name('data.tipe.dan.status.sekolah');
             Route::get('/jurusan-asal-sekolah-sma', 'jurusanAsalSekolahSma')->name('data.jurusan.asal.sekolah.sma');
             Route::get('/jurusan-asal-sekolah-ma', 'jurusanAsalSekolahMa')->name('data.jurusan.asal.sekolah.ma');
             Route::get('/jurusan-asal-sekolah-smk', 'jurusanAsalSekolahSmk')->name('data.jurusan.asal.sekolah.smk');

@@ -7,6 +7,22 @@
   <div class="container my-4">
     <h1 class="h4 mb-4">DATA SEBARAN CALON MAHASISWA</h1>
     <div class="row align-items-end">
+      <div class="col-lg-12 mb-4">
+        <div class="row">
+          <div class="col-lg-3">
+            <form action="" method="GET">
+              <div class="mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                  <input type="date" class="form-control" name="tanggal" id="tanggal">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary text-capitalize">filter</button>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="col-lg-3">
         <form action="{{ route('visual.data.sebaran.calon.mahasiswa') }}" method="GET">
           <div class="mb-3">
@@ -23,6 +39,9 @@
           </div>
           <button type="submit" class="btn btn-primary text-capitalize">filter</button>
         </form>
+      </div>
+      <div class="col-lg-1 align-self-center">
+        <h1 class="h5">atau</h1>
       </div>
       <div class="col-lg-6">
         <form action="{{ route('visual.data.sebaran.calon.mahasiswa') }}" method="GET">
@@ -60,6 +79,12 @@
         </form>
       </div>
     </div>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+      <h1 class="h5">
+        Total Daftar: {{ $total_pendaftar }} Mahasiswa
+      </h1>
+      <h1 class="h5">Informasi Sebaran Calon Mahasiswa: {{ now()->format('d F Y') }}</h1>
+    </div>
     <div class="row mt-4">
       <div class="col-lg-4 mb-4">
         <div class="card h-100">
@@ -83,7 +108,11 @@
       <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">tipe dan status sekolah (SMA & SMK)</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h6 text-center text-uppercase">tipe dan status sekolah (SMA & SMK)</h1>
+              <a href="{{ route('visual.data.tipe.dan.status.sekolah', 'sma_smk') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
+            </div>
             <canvas id="chart_tipe_dan_status_sekolah_sma_and_smk"></canvas>
           </div>
         </div>
@@ -91,7 +120,11 @@
       <div class="col-lg mb-4">
         <div class="card">
           <div class="card-body">
-            <h1 class="h5 text-center text-uppercase">tipe dan status sekolah (MA & Lain - Lain)</h1>
+            <div class="d-flex justify-content-between align-items-center">
+              <h1 class="h6 text-center text-uppercase">tipe dan status sekolah (MA & Lain - Lain)</h1>
+              <a href="{{ route('visual.data.tipe.dan.status.sekolah', 'ma_dll') }}"
+                class="btn btn-success text-capitalize">Selengkapnya</a>
+            </div>
             <canvas id="chart_tipe_dan_status_sekolah_ma_and_lain_lain"></canvas>
           </div>
         </div>
@@ -182,6 +215,14 @@
           legend: {
             position: 'bottom',
           }
+        },
+        onClick: function(event, item){
+          const daftarJurusan = dataJalurDaftar.map(item => item.nama_jalur);
+          const indexChart = item[0].element.$context.dataIndex;
+
+          const REQUEST_URL = "{{ route('visual.data.jalur.pendaftaran', ':jalurDaftar') }}".replace(':jalurDaftar', daftarJurusan[indexChart]);
+          
+          window.open(REQUEST_URL, '_newtab');
         }
       },
       plugins: [ChartDataLabels]
@@ -412,7 +453,6 @@
   });
 
   const dataAsalKotaSekolah = {!! json_encode($asal_kota_sekolah) !!};
-  console.log(dataAsalKotaSekolah);
   new Chart($('#chart_asal_kota_sekolah'), {
     type: 'bar',
     data: {
