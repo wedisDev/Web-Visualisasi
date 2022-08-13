@@ -523,7 +523,8 @@ class VisualController extends Controller
                 $jalur_daftar[] = [
                     'nama_jalur' => $jalur->nama_jalur,
                     'count' => collect(DB::select("SELECT DISTINCT(mt.no_test) FROM jalur_masuk_pmb jmp 
-                            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = '$jalur->id_jalur'"))->count()
+                            JOIN mhs_temp mt ON SUBSTR(mt.no_test, 3, 2) = '$jalur->id_jalur'
+                            WHERE SUBSTR(mt.no_test, 0, 2) = '$current_date'"))->count()
                 ];
             }
 
@@ -531,30 +532,38 @@ class VisualController extends Controller
                 $prodi_laki_laki[] = [
                     'prodi' => $loopItem->nama_prodi,
                     'count' => DB::select("SELECT COUNT(mt.nim) as count
-                    FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count
+                    FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'
+                    AND SUBSTR(mt.no_test, 0, 2) = '$current_date'")[0]->count
                 ];
                 $prodi_perempuan[] = [
                     'prodi' => $loopItem->nama_prodi,
                     'count' => DB::select("SELECT COUNT(mt.nim) as count
-                    FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count
+                    FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'
+                    AND SUBSTR(mt.no_test, 0, 2) = '$current_date'")[0]->count
                 ];
 
                 $prodi_all[] = [
                     'prodi' => $loopItem->nama_prodi,
                     'chart_id' => str_replace(' ', '_', strtolower($loopItem->nama_prodi)),
                     'laki_laki' => DB::select("SELECT COUNT(mt.nim) as count
-                    FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count,
+                                FROM mhs_temp mt WHERE mt.sex = 1 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'
+                                AND SUBSTR(mt.no_test, 0, 2) = '$current_date'")[0]->count,
                     'perempuan' => DB::select("SELECT COUNT(mt.nim) as count
-                    FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'")[0]->count
+                                FROM mhs_temp mt WHERE mt.sex = 2 AND SUBSTR(mt.nim, 3, 5) = '$loopItem->id_prodi'
+                                AND SUBSTR(mt.no_test, 0, 2) = '$current_date'")[0]->count
                 ];
             }
 
             $asal_kota_sekolah = [
                 'label' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
+                            WHERE SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('nama_kota'),
                 'data' => collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
                             FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
+                            WHERE SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"))->take(5)->pluck('count')
             ];
 
@@ -562,14 +571,16 @@ class VisualController extends Controller
                 'sma' => [
                     'negeri' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama LIKE '%SMAN%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama LIKE '%SMAN%'
                                 OR sm.nama LIKE '%SMA NEGERI%'
                                 OR sm.nama LIKE '%SMA Negeri%'
                                 OR sm.nama LIKE '%SMUN%'
                                 OR sm.nama LIKE '%SMU NEGERI%'")),
                     'swasta' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama NOT LIKE '%SMAN%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama NOT LIKE '%SMAN%'
                                 AND sm.nama NOT LIKE '%SMA NEGERI%'
                                 AND sm.nama NOT LIKE '%SMA Negeri%'
                                 AND sm.nama LIKE 'SMA%'
@@ -578,7 +589,8 @@ class VisualController extends Controller
                 'smk' => [
                     'negeri' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama LIKE '%SMKN%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama LIKE '%SMKN%'
                                 OR sm.nama LIKE '%SMK NEGERI%'
                                 OR sm.nama LIKE '%SMK Negeri%'
                                 OR sm.nama LIKE '%STMN%'
@@ -586,7 +598,8 @@ class VisualController extends Controller
                                 OR sm.nama LIKE '%SMEA NEGERI%'")),
                     'swasta' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama NOT LIKE '%SMKN%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama NOT LIKE '%SMKN%'
                                 AND sm.nama NOT LIKE '%SMK NEGERI%'
                                 AND sm.nama NOT LIKE '%SMK Negeri%'
                                 AND sm.nama NOT LIKE '%STMN%'
@@ -598,12 +611,14 @@ class VisualController extends Controller
                 ],
                 'ma' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama LIKE 'MADRASAH%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama LIKE 'MADRASAH%'
                                 OR sm.nama LIKE 'MA%'
                                 OR sm.nama LIKE 'MADARASYAH%'")),
                 'lain_lain' => count(DB::select("SELECT mt.nim, op.kota_sma, op.asal_sma, sm.nama
                                 FROM mhs_temp mt JOIN pendaftaran_online op ON op.no_test = mt.no_test
-                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE sm.nama NOT LIKE 'SMA%'
+                                JOIN smu_mf sm ON sm.id = op.asal_sma WHERE
+                                SUBSTR(mt.no_test, 0, 2) = '$current_date' AND sm.nama NOT LIKE 'SMA%'
                                 AND sm.nama NOT LIKE 'SMU%'
                                 AND sm.nama NOT LIKE 'SMEA%'
                                 AND sm.nama NOT LIKE 'SMK%'
@@ -617,31 +632,43 @@ class VisualController extends Controller
                 'sma' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN IN ('15','16','17','70')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN IN ('15','16','17','70')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'ma' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN IN ('15','16','70')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN IN ('15','16','70')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ],
                 'smk' => [
                     'label' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('nama_jurusan'),
                     'data' => collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
                             FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+                            JOIN mhs_temp mt ON mt.no_test = po.no_test
                             WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43')
+                            AND SUBSTR(mt.no_test, 0, 2) = '$current_date'
                             GROUP BY js.nama ORDER BY COUNT(*) DESC"))->take(5)->pluck('count')
                 ]
             ];
@@ -727,6 +754,27 @@ class VisualController extends Controller
                     $chartData = PendaftaranOnline::whereNotNull('no_test')
                         ->get(['nama_mhs', 'hp_mhs', 'email', 'path_foto', 'path_rapor', 'path_bayar']);
                     break;
+                case 'membayar registrasi':
+                    $chartData = DB::select("SELECT *
+                                FROM save_sesi ss JOIN pendaftaran_online po ON po.no_test = ss.no_test
+                                WHERE ss.sts_upl_buktiregis IS NOT NULL AND ss.path_buktiregis IS NOT NULL");
+                    break;
+                case 'registrasi ulang':
+                    $chartData = DB::select("SELECT * FROM save_sesi ss 
+                                JOIN pendaftaran_online po ON po.no_test = ss.no_test
+                                WHERE EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)");
+                    break;
+                case 'memiliki nim':
+                    $chartData = DB::select("SELECT * 
+                                FROM mhs_temp mt JOIN pendaftaran_online po ON po.no_test = mt.no_test
+                                WHERE mt.nim IS NOT NULL");
+                    break;
+                case 'mengundurkan diri':
+                    $chartData = DB::select("SELECT * 
+                                FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.mhs_nim
+                                JOIN pendaftaran_online po ON po.no_test = mt.no_test
+                                WHERE hm.semester = '211' AND hm.sts_mhs = 'O'");
+                    break;
             }
         } else if ($status == 'belum') {
             switch ($chart) {
@@ -751,6 +799,27 @@ class VisualController extends Controller
                     $chartData = PendaftaranOnline::whereNull('no_test')
                         ->get(['nama_mhs', 'hp_mhs', 'email', 'path_foto', 'path_rapor', 'path_bayar']);
                     break;
+                case 'membayar registrasi':
+                    $chartData = DB::select("SELECT *
+                                FROM save_sesi ss JOIN pendaftaran_online po ON po.no_test = ss.no_test
+                                WHERE ss.sts_upl_buktiregis IS NULL AND ss.path_buktiregis IS NULL");
+                    break;
+                case 'registrasi ulang':
+                    $chartData = DB::select("SELECT * FROM save_sesi ss 
+                                    JOIN pendaftaran_online po ON po.no_test = ss.no_test
+                                    WHERE NOT EXISTS (SELECT * FROM mhs_temp mt WHERE mt.no_test = ss.no_test)");
+                    break;
+                case 'memiliki nim':
+                    $chartData = DB::select("SELECT * 
+                                    FROM mhs_temp mt JOIN pendaftaran_online po ON po.no_test = mt.no_test
+                                    WHERE mt.nim IS NULL");
+                    break;
+                case 'mengundurkan diri':
+                    $chartData = DB::select("SELECT * 
+                                    FROM his_mf hm JOIN mhs_temp mt ON mt.nim = hm.mhs_nim
+                                    JOIN pendaftaran_online po ON po.no_test = mt.no_test
+                                    WHERE hm.semester = '211' AND hm.sts_mhs IS NULL");
+                    break;
             }
         }
 
@@ -767,6 +836,7 @@ class VisualController extends Controller
     {
         $asal_kota_sekolah = collect(DB::select("SELECT km.nama AS nama_kota, COUNT(po.no_online) AS count
         FROM pendaftaran_online po JOIN kota_mf km ON km.id = po.kota_sma
+        JOIN mhs_temp mt ON mt.no_test = po.no_test
         GROUP BY km.nama ORDER BY COUNT(po.no_online) DESC"));
 
         return view('pages.dashboard.visual.detail_asal_kota_sekolah', [
@@ -778,6 +848,7 @@ class VisualController extends Controller
     {
         $jurusan_asal_sekolah_sma = collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
         FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+        JOIN mhs_temp mt ON mt.no_test = po.no_test
         WHERE js.KD_JURUSAN IN ('15','16','17','70') 
         GROUP BY js.nama ORDER BY count DESC"));
 
@@ -790,6 +861,7 @@ class VisualController extends Controller
     {
         $jurusan_asal_sekolah_ma = collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
         FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+        JOIN mhs_temp mt ON mt.no_test = po.no_test
         WHERE js.KD_JURUSAN IN ('15','16','70')
         GROUP BY js.nama ORDER BY count DESC"));
 
@@ -802,6 +874,7 @@ class VisualController extends Controller
     {
         $jurusan_asal_sekolah_smk = collect(DB::select("SELECT TRIM(js.nama) AS nama_jurusan, COUNT(*) AS count
         FROM pendaftaran_online po JOIN jurusan_smu js ON js.kd_jurusan = po.jur_sma
+        JOIN mhs_temp mt ON mt.no_test = po.no_test
         WHERE js.KD_JURUSAN NOT IN ('15','16','17','70', '43')
         GROUP BY js.nama ORDER BY count DESC"));
 
