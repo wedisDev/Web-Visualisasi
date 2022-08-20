@@ -1,0 +1,107 @@
+/* auth */
+.form_auth_wrapper{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.form_auth_wrapper .left_side{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../images/img-login.png');
+  background-size: cover;
+}
+
+.form_auth_wrapper .right_side{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem;
+}
+
+.form_auth_wrapper .right_side .wrapper{
+  width: 100%;
+}
+
+.form_auth_wrapper .right_side img{
+  max-height: 5.5rem!important;
+}
+/* auth */
+
+/* dashboard */
+.navbar a {
+  color: white!important;
+}
+
+.dropdown-menu a {
+  color: black!important;
+}
+
+.navbar-collapse{
+  flex-grow: unset!important;
+}
+
+.carousel-item img{
+  object-fit: cover!important;
+  height: 80vh!important;
+}
+
+.hero_section {
+  height: 80vh;
+  background-image: url('../images/img-carousel.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.card_visual{
+  display: flex!important;
+  flex-direction: column!important;
+  align-items: center!important;
+}
+
+.card_visual .icon{
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background-color: #fff;
+}
+
+.card_visual .icon i{
+  font-size: 1.5rem;
+}
+
+.card_visual .icon i, 
+.card_visual h1{
+  text-decoration: none!important;
+  color: #000!important;
+}
+/* dashboard */
+
+
+/* breakpoint mobile */
+@media (max-width: 575.98px) {
+  /* auth */
+  .form_auth_wrapper{
+    grid-template-columns: 1fr;
+  }
+
+  .form_auth_wrapper .right_side{
+    padding: 0 2.5rem;
+  }
+  /* auth */
+
+  /* dahsboard */
+  .carousel-item img{
+    object-fit: cover!important;
+    height: 45vh!important;
+  }
+  /* dahsboard */
+}
